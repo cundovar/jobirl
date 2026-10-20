@@ -1,3 +1,5 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Révision JobIRL</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -35,6 +37,7 @@
   --good: #6cc48f; --good-soft: #17301f; --bad: #e88080; --bad-soft: #3a1c1c; color-scheme: dark;
 }
 * { box-sizing: border-box; }
+[hidden] { display: none !important; }
 body { background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 16px; line-height: 1.55; }
 .wrap { max-width: 860px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 24px 64px; }
 h1, h2, h3 { font-family: var(--display); line-height: 1.15; text-wrap: balance; margin: 0; }
@@ -146,11 +149,162 @@ footer { color: var(--muted); font-size: .85rem; margin-top: 40px; }
 .ex b { color: var(--ink); }
 .schema { overflow-x: auto; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px; }
 .schema svg { display: block; min-width: 560px; width: 100%; height: auto; }
+.work-visual { display: grid; gap: 12px; padding: 16px; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; }
+.work-visual figcaption { color: var(--muted); font-size: .88rem; }
+.work-visual .wv-title { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 12px; align-items: center; }
+.work-visual .wv-title strong { font-family: var(--display); }
+.work-visual .wv-note { color: var(--muted); font-size: .84rem; }
+.wv-table { overflow-x: auto; }
+.wv-table table { border-collapse: collapse; width: 100%; min-width: 510px; font-size: .88rem; }
+.wv-table th, .wv-table td { padding: 9px 10px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+.wv-table th { color: var(--muted); font-weight: 700; }
+.wv-mark { color: var(--accent); font-weight: 700; }
+.wv-warn { color: var(--bad); font-weight: 700; }
+.wv-total { display: flex; flex-wrap: wrap; gap: 8px 18px; padding: 12px; background: var(--accent-soft); border-radius: 8px; }
+.wv-board { display: grid; grid-template-columns: repeat(4, minmax(125px, 1fr)); gap: 9px; overflow-x: auto; }
+.wv-column { min-width: 125px; padding: 9px; background: var(--bg); border: 1px solid var(--line); border-radius: 8px; }
+.wv-column h4 { margin: 0 0 8px; color: var(--muted); font: 700 .78rem var(--body); text-transform: uppercase; letter-spacing: .04em; }
+.wv-card { padding: 9px; margin-top: 7px; background: var(--surface); border: 1px solid var(--line); border-radius: 6px; font-size: .86rem; }
+.wv-card small { display: block; margin-top: 5px; color: var(--muted); }
+.wv-ticket { display: grid; grid-template-columns: minmax(0, 1fr) minmax(220px, .8fr); gap: 14px; }
+.wv-panel { padding: 12px; background: var(--bg); border: 1px solid var(--line); border-radius: 8px; }
+.wv-panel h4 { margin: 0 0 8px; font: 700 .9rem var(--body); }
+.wv-panel p + p { margin-top: 7px; }
+.wv-screen { display: grid; gap: 8px; align-content: start; }
+.wv-browser { padding: 7px 9px; background: var(--surface); border: 1px solid var(--line); border-radius: 6px; color: var(--muted); font-size: .78rem; overflow-wrap: anywhere; }
+.wv-app-card { padding: 10px; background: var(--surface); border: 1px solid var(--line); border-radius: 6px; }
+.wv-app-card .wv-button { display: inline-block; margin-top: 8px; padding: 5px 9px; background: var(--accent); color: #fff; border-radius: 5px; font-size: .82rem; }
+.wv-state { padding: 7px 9px; border-radius: 6px; font-size: .82rem; }
+.wv-state.good { color: var(--good); background: var(--good-soft); }
+.wv-state.bad { color: var(--bad); background: var(--bad-soft); }
+.wv-console { overflow: hidden; border: 1px solid var(--line); border-radius: 8px; background: #17212b; color: #e8edf2; font: .8rem/1.55 ui-monospace, SFMono-Regular, Consolas, monospace; }
+.wv-console-head { padding: 7px 10px; background: #263544; color: #c6d2df; }
+.wv-console-line { padding: 5px 10px; overflow-wrap: anywhere; }
+.wv-console-line + .wv-console-line { border-top: 1px solid #344454; }
+.wv-console-error { color: #ffb3b3; }
+.wv-flow { display: grid; grid-template-columns: repeat(5, minmax(100px, 1fr)); gap: 8px; overflow-x: auto; }
+.wv-flow-step { min-width: 100px; padding: 10px; background: var(--bg); border: 1px solid var(--line); border-radius: 8px; font-size: .82rem; }
+.wv-flow-step b { display: block; margin-bottom: 4px; color: var(--accent); }
+.wv-triage { display: grid; gap: 10px; }
+.wv-question { justify-self: center; max-width: 42ch; padding: 10px 15px; background: var(--accent-soft); border: 1px solid var(--accent); border-radius: 8px; text-align: center; font-weight: 700; }
+.wv-branches { display: grid; grid-template-columns: repeat(4, minmax(140px, 1fr)); gap: 9px; }
+.wv-branch { padding: 11px; border: 1px solid var(--line); border-radius: 8px; background: var(--bg); }
+.wv-branch strong { display: block; margin-bottom: 5px; color: var(--accent); }
+.wv-branch span { display: block; font-size: .86rem; }
+.wv-branch small { display: block; margin-top: 7px; color: var(--muted); }
+.wv-route { display: block; margin-top: 7px; padding-top: 7px; border-top: 1px solid var(--line); font-size: .82rem; font-weight: 700; }
+.wv-three { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 9px; }
+.wv-three > div { padding: 11px; background: var(--bg); border: 1px solid var(--line); border-radius: 8px; }
+.wv-three strong { display: block; margin-bottom: 5px; color: var(--accent); }
+.wv-three p { font-size: .86rem; }
+.wv-sla { display: grid; grid-template-columns: 1fr auto auto; gap: 0 12px; align-items: center; }
+.wv-sla > * { padding: 8px 4px; border-bottom: 1px solid var(--line); font-size: .86rem; }
+.wv-sla .wv-note { font-weight: 700; }
+@media (max-width: 620px) { .wv-branches { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 560px) { .wv-three { grid-template-columns: 1fr; } .wv-sla { grid-template-columns: 1fr auto; } .wv-sla > :nth-child(3n + 2) { grid-column: 2; } .wv-sla > :nth-child(3n + 3) { display: none; } }
+@media (max-width: 380px) { .wv-branches { grid-template-columns: 1fr; } }
+.wv-kpis { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 9px; }
+.wv-kpi { padding: 11px; background: var(--bg); border: 1px solid var(--line); border-radius: 8px; }
+.wv-kpi strong { display: block; font: 700 1.35rem var(--display); }
+.wv-kpi span { color: var(--muted); font-size: .82rem; }
+.wv-funnel { display: grid; gap: 8px; }
+.wv-step { display: flex; justify-content: space-between; gap: 10px; padding: 8px 11px; background: var(--accent-soft); border-radius: 6px; font-size: .88rem; }
+.wv-step:nth-child(2) { width: 82%; }
+.wv-step:nth-child(3) { width: 61%; }
+.wv-step:nth-child(4) { width: 34%; }
+@media (max-width: 600px) { .wv-ticket { grid-template-columns: 1fr; } .wv-kpis { grid-template-columns: 1fr; } .wv-step:nth-child(n) { width: 100%; } }
 .minq { display: grid; gap: 12px; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 18px; }
 .minq .item { display: grid; gap: 8px; }
 .minq .item p { font-weight: 600; }
 .minq .opts button { font-size: .95rem; }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+/* Visuels de cours : lisibles, sélectionnables et disponibles hors ligne. */
+.course-visual, .work-visual { margin: 10px 0; min-width: 0; }
+.course-visual { display: grid; gap: 16px; padding: clamp(14px, 3vw, 24px); border: 1px solid var(--line); border-radius: 12px; background: var(--surface); }
+.cv-heading { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 6px 16px; border-bottom: 1px solid var(--line); padding-bottom: 10px; }
+.cv-heading > strong { font-family: var(--display); font-size: 1.02rem; }
+.cv-heading > span { color: var(--muted); font-size: .76rem; }
+.course-visual figcaption { color: var(--muted); font-size: .9rem; line-height: 1.5; }
+.course-visual p { max-width: none; }
+.cv-flow { margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(115px, 1fr)); gap: 22px; list-style: none; }
+.cv-flow li { position: relative; min-width: 0; display: grid; align-content: start; gap: 7px; padding: 12px; background: var(--accent-soft); border: 1px solid var(--line); border-radius: 9px; }
+.cv-flow li:not(:last-child)::after { content: '→'; position: absolute; right: -20px; top: 42%; color: var(--accent); font-size: 1.2rem; font-weight: 700; }
+.cv-number { width: 25px; height: 25px; display: grid; place-items: center; border: 1px solid var(--accent); color: var(--accent); border-radius: 50%; font-weight: 700; font-size: .8rem; }
+.cv-flow li > strong { font-size: .92rem; }
+.cv-flow li > span:last-child { font-size: .86rem; }
+.cv-compare { display: grid; grid-template-columns: repeat(auto-fit, minmax(175px, 1fr)); gap: 12px; }
+.cv-case { display: flex; flex-direction: column; gap: 10px; padding: 16px; border: 1px solid var(--line); border-top: 4px solid var(--accent); border-radius: 8px; background: var(--bg); }
+.cv-case-1 { border-top-color: var(--mark); }
+.cv-case-2 { border-top-color: var(--good); }
+.cv-case p { font-size: .92rem; }
+.cv-outcome { margin-top: auto; border-top: 1px solid var(--line); padding-top: 9px; color: var(--muted); font-size: .84rem; font-weight: 600; }
+.cv-window { min-width: 0; border: 1px solid var(--line); border-radius: 9px; overflow: hidden; }
+.cv-chrome { display: flex; gap: 14px; padding: 8px 12px; background: var(--bg); border-bottom: 1px solid var(--line); color: var(--muted); font-size: .78rem; }
+.cv-chrome > span { color: var(--accent); letter-spacing: 3px; }
+.cv-screen-layout { display: grid; grid-template-columns: 130px minmax(0, 1fr); }
+.cv-sidebar { background: var(--accent-soft); border-right: 1px solid var(--line); padding: 18px 12px; color: var(--accent); font-size: .8rem; line-height: 2.4; }
+.cv-fields { display: grid; gap: 10px; margin: 0; padding: 16px; }
+.cv-fields dt { font-size: .78rem; font-weight: 700; color: var(--muted); margin-bottom: 4px; }
+.cv-fields dd { margin: 0; padding: 9px 11px; border: 1px solid var(--line); background: var(--bg); border-radius: 5px; font-size: .9rem; overflow-wrap: anywhere; }
+.cv-scroll { min-width: 0; overflow-x: auto; border: 1px solid var(--line); border-radius: 8px; }
+.cv-scroll:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.cv-scroll table { border-collapse: collapse; width: 100%; min-width: 420px; font-size: .86rem; }
+.cv-scroll th, .cv-scroll td { padding: 11px 12px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--line); }
+.cv-scroll thead { background: var(--accent-soft); }
+.cv-scroll tbody th { font-weight: 600; }
+.cv-scroll tbody tr:last-child > * { border-bottom: 0; }
+.cv-devtools { min-width: 0; overflow: hidden; border: 1px solid #42576a; border-radius: 8px; background: #15212d; color: #edf3f8; }
+.cv-devtabs { display: flex; gap: 15px; padding: 9px 12px 0; background: #253646; font-size: .82rem; }
+.cv-devtabs span { padding-bottom: 7px; }
+.cv-devtabs .cv-active { border-bottom: 3px solid #83c9ff; color: #b4ddff; }
+.cv-code { padding: 12px; overflow-x: auto; }
+.cv-code > div { padding: 7px 0; border-bottom: 1px solid #344454; }
+.cv-code > div:last-child { border: 0; }
+.cv-code code { font: .8rem/1.6 ui-monospace, Consolas, monospace; white-space: pre-wrap; overflow-wrap: anywhere; }
+.cv-bars { display: grid; gap: 13px; }
+.cv-bar-label { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 6px 12px; margin-bottom: 5px; font-size: .9rem; }
+.cv-track { height: 18px; border-radius: 4px; background: var(--bg); border: 1px solid var(--line); overflow: hidden; }
+.cv-track > span { display: block; height: 100%; background: var(--accent); }
+.cv-phone { width: min(100%, 310px); justify-self: center; border: 3px solid var(--muted); padding: 12px; border-radius: 28px; background: var(--bg); box-shadow: 0 6px 0 var(--line); }
+.cv-phone-top { padding: 2px 9px 11px; font-size: .7rem; color: var(--muted); }
+.cv-phone-title { padding: 10px; background: var(--accent-soft); color: var(--accent); font-weight: 700; border-radius: 9px; }
+.cv-phone-card { margin: 10px 0; padding: 12px; border: 1px solid var(--line); border-radius: 9px; background: var(--surface); }
+.cv-phone-card strong { font-size: .86rem; }
+.cv-phone-card p { margin-top: 5px; font-size: .84rem; overflow-wrap: anywhere; }
+.cv-phone-bottom { width: 60px; height: 4px; border-radius: 2px; background: var(--muted); margin: 15px auto 2px; }
+.cv-checklist { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
+.cv-checklist li { display: flex; gap: 12px; padding: 11px; border: 1px solid var(--line); border-radius: 7px; background: var(--bg); }
+.cv-check { flex: 0 0 25px; height: 25px; display: grid; place-items: center; border: 1px solid currentColor; border-radius: 5px; }
+.cv-checked { color: var(--good); background: var(--good-soft); }
+.cv-pending { color: var(--muted); }
+.cv-checklist li div > span { display: block; margin-top: 4px; color: var(--muted); font-size: .86rem; }
+.cv-search { padding: 16px; border: 1px solid var(--line); border-radius: 9px; }
+.cv-search-query { margin-bottom: 18px; padding: 10px 14px; background: var(--bg); border: 1px solid var(--line); border-radius: 22px; font-size: .86rem; }
+.cv-search-url { font-size: .78rem; color: var(--muted); }
+.cv-search-title { margin: 5px 0; font-size: 1.15rem; color: var(--accent); font-weight: 600; }
+.cv-search p { font-size: .9rem; }
+.course-toc { background: var(--surface); padding: 12px 16px; border: 1px solid var(--line); border-radius: 9px; }
+.course-toc summary { font-weight: 700; cursor: pointer; }
+.course-toc ol { display: grid; grid-template-columns: 1fr 1fr; gap: 7px 28px; padding-left: 22px; font-size: .9rem; margin-bottom: 3px; }
+.term { scroll-margin-top: 90px; min-width: 0; }
+.wv-board, .wv-flow { min-width: 0; }
+.wv-table { min-width: 0; }
+.wv-app-card .wv-button { color: var(--ink); background: var(--accent-soft); border: 1px solid var(--accent); }
+@media (max-width: 650px) {
+  .cv-flow { grid-template-columns: 1fr; gap: 24px; }
+  .cv-flow li { grid-template-columns: 28px 1fr; align-items: start; }
+  .cv-flow li > span:last-child { grid-column: 2; }
+  .cv-flow li:not(:last-child)::after { content: '↓'; right: auto; left: 50%; top: auto; bottom: -25px; }
+  .cv-screen-layout { grid-template-columns: 1fr; }
+  .cv-sidebar { display: none; }
+  .course-toc ol { grid-template-columns: 1fr; }
+  .wv-flow { grid-template-columns: 1fr; overflow: visible; }
+  .wv-board { grid-template-columns: repeat(2, minmax(0, 1fr)); overflow: visible; }
+  .wv-column { min-width: 0; }
+  .schema svg { min-width: 0; }
+}
+@media (max-width: 380px) { .cv-compare, .wv-board { grid-template-columns: 1fr; } }
+
 </style>
 
 <div class="wrap">
@@ -492,7 +646,7 @@ footer { color: var(--muted); font-size: .85rem; margin-top: 40px; }
     bugs: {
       why: "Chez JobIRL, les signalements arriveront de partout : jeunes, pros, mentors, équipes terrain. Ton rôle est de faire le tri, de reproduire le problème et de le transmettre au prestataire sous une forme qu'il peut corriger du premier coup. Un rapport de bug flou coûte des jours d'allers-retours ; un bon rapport se corrige dans l'heure.",
       terms: [
-        { w: "Trier avant tout", s: "bug, erreur d'usage, évolution ou contenu", p: "Quatre cas très différents. Un bug : le site ne fait pas ce qui était prévu. Une erreur d'usage : l'utilisateur ne sait pas comment faire, le site fonctionne. Une évolution : on voudrait que le site fasse quelque chose de nouveau. Un problème de contenu : un texte, une fiche ou une offre est fausse, tu peux souvent la corriger toi-même dans le back-office.", ex: "« Je ne trouve pas où ajouter ma photo » : erreur d'usage, donc réponse et peut-être une ligne dans la FAQ. « La photo ne s'enregistre pas » : bug.", say: "« Avant de transmettre, je qualifie : bug, usage, évolution ou contenu. Seuls les bugs et les évolutions vont au prestataire. »" },
+        { w: "Trier avant tout", s: "bug, erreur d'usage, évolution ou contenu", p: "Quatre cas très différents. Un bug : le site ne fait pas ce qui était prévu. Une erreur d'usage : l'utilisateur ne sait pas comment faire, le site fonctionne. Une évolution : on voudrait que le site fasse quelque chose de nouveau. Un problème de contenu : un texte, une fiche ou une offre est fausse, tu peux souvent la corriger toi-même dans le back-office.", ex: "« Je ne trouve pas où ajouter ma photo » : erreur d'usage, donc réponse et peut-être une ligne dans la FAQ. « La photo ne s'enregistre pas » : bug.", say: "« Avant de transmettre, je qualifie : bug, usage, évolution ou contenu. Seuls les bugs et les évolutions vont au prestataire. »", visual: '<figure class="work-visual wv-triage" role="group" aria-label="Aide au tri : quatre catégories de signalement et la suite à donner."><div class="wv-question">Que signale la personne ?</div><div class="wv-branches"><div class="wv-branch"><strong>Le résultat est incorrect</strong><span>La page ou le bouton ne fait pas ce qui était prévu.</span><small>Ex. : la photo ne s’enregistre pas.</small><span class="wv-route">BUG → reproduire et transmettre</span></div><div class="wv-branch"><strong>Une nouvelle fonction manque</strong><span>Le site marche, mais on demande une possibilité en plus.</span><small>Ex. : filtrer les offres par distance.</small><span class="wv-route">ÉVOLUTION → cadrer et prioriser</span></div><div class="wv-branch"><strong>La fonction existe, mais on ne la trouve pas</strong><span>La personne ne sait pas comment faire.</span><small>Ex. : ne pas trouver où ajouter sa photo.</small><span class="wv-route">USAGE → aider, améliorer le guide</span></div><div class="wv-branch"><strong>Une information est fausse</strong><span>Le site fonctionne, mais un texte ou une fiche est incorrect.</span><small>Ex. : une offre affiche une mauvaise date.</small><span class="wv-route">CONTENU → corriger dans le back-office</span></div></div><figcaption>Premier tri : en cas de doute, reproduire la situation et vérifier le résultat attendu avant de transmettre.</figcaption></figure>' },
         { w: "Reproduire", s: "refaire le problème soi-même", p: "Un bug qu'on ne sait pas reproduire est presque impossible à corriger. Tu refais exactement le parcours de l'utilisateur, avec un compte du même type (jeune, pro, mentor), jusqu'à voir le problème. Tu notes chaque clic.", ex: "Un pro dit que le formulaire d'offre bloque : tu crées une offre avec un compte pro de test et tu notes à quelle étape ça casse.", say: "« J'ai reproduit le bug trois fois sur un compte pro de test, voici les étapes. »" },
         { w: "Isoler", s: "savoir où ça casse", p: "Tu changes une seule chose à la fois pour savoir d'où vient le problème : un autre navigateur, la navigation privée (sans cache ni extensions), un autre compte, le téléphone au lieu de l'ordinateur, le site au lieu de l'application.", ex: "Le bug n'existe que sur iPhone dans l'application : c'est une information précieuse pour le développeur.", say: "« Ça marche sur Chrome mais pas sur Safari, et uniquement dans l'appli. »" },
         { w: "Le contexte", s: "ce que le développeur te demandera toujours", p: "L'adresse de la page (URL), le navigateur et sa version, l'appareil et son système (Android, iOS, Windows), le type de compte, la date et l'heure précises. L'heure permet de retrouver l'erreur dans les logs du serveur.", ex: "« Mardi 14 h 05, compte mentor, Chrome 130 sur Windows, page /e-mentorat ».", say: "« Je joins toujours l'URL, l'appareil, le compte et l'heure. »" },
@@ -1818,14 +1972,267 @@ footer { color: var(--muted); font-size: .85rem; margin-top: 40px; }
     + '<text x="75" y="132" fill="var(--muted)" font-size="12">ce que voit le jeune</text><text x="320" y="132" fill="var(--muted)" font-size="12">les règles, les e-mails</text><text x="565" y="132" fill="var(--muted)" font-size="12">ce qui est stocké</text>'
     + '</g><defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10z" fill="var(--muted)"/></marker></defs></svg></div>';
 
+  var WORK_VISUALS = {
+    devs: '<figure class="work-visual" role="group" aria-label="Exemple fictif de ticket décrivant une évolution avec contexte, user story, critères et priorité.">' +
+      '<div class="wv-title"><strong>Ticket · Rappeler un pro sans réponse</strong><span class="wv-note">Exemple pédagogique fictif</span></div>' +
+      '<div class="wv-panel"><p><b>Contexte :</b> certains jeunes n’obtiennent pas de réponse à leur message.</p><p><b>Besoin :</b> En tant que pro bénévole, je veux recevoir un rappel afin de ne pas laisser un jeune sans réponse.</p><p><b>Critères :</b> après 7 jours sans lecture, un seul rappel est envoyé ; le pro peut le désactiver dans ses préférences.</p><p><b>Priorité :</b> haute · <b>Échéance :</b> avant la rentrée</p></div>' +
+      '<figcaption>Le ticket décrit le besoin et les conditions de réussite, sans imposer une solution technique.</figcaption></figure>',
+    contrat: '<figure class="work-visual" role="group" aria-label="Comparaison pédagogique entre garantie, maintenance et délais de service SLA.">' +
+      '<div class="wv-title"><strong>Après la livraison · qui intervient et pour quoi ?</strong><span class="wv-note">Exemple pédagogique, engagements à définir au contrat</span></div>' +
+      '<div class="wv-three"><div><strong>Garantie</strong><p>Corriger sans frais une anomalie du travail livré pendant la période prévue.</p><small>Ex. : le rappel part deux fois au lieu d’une.</small></div><div><strong>Maintenance (TMA)</strong><p>Faire vivre la plateforme : corrections, sécurité et petites évolutions selon le contrat.</p><small>Vérifier le forfait et les tâches incluses.</small></div><div><strong>SLA</strong><p>Fixer les délais de prise en charge et de résolution selon la gravité.</p><small>Vérifier horaires, week-ends et jours fériés.</small></div></div>' +
+      '<figcaption>La garantie concerne une anomalie livrée ; une nouvelle fonction relève d’une demande distincte.</figcaption></figure>',
+    recette: '<figure class="work-visual" role="group" aria-label="Étapes de recette, décision go ou no-go et mise en production.">' +
+      '<div class="wv-title"><strong>De la livraison à la mise en ligne</strong><span class="wv-note">Parcours de validation</span></div>' +
+      '<div class="wv-flow"><div class="wv-flow-step"><b>1 · Préparer</b>Critères et comptes de test fictifs.</div><div class="wv-flow-step"><b>2 · Tester</b>Comparer attendu et obtenu.</div><div class="wv-flow-step"><b>3 · Corriger</b>Transmettre les anomalies.</div><div class="wv-flow-step"><b>4 · Décider</b>Go si les points bloquants sont levés.</div><div class="wv-flow-step"><b>5 · Déployer</b>Sauvegarde, créneau et retour arrière.</div></div>' +
+      '<div class="wv-state bad"><b>No-go :</b> une anomalie majeure reste ouverte. On reporte et on reteste après correction.</div><figcaption>La recette vérifie les critères d’acceptation avant toute mise en production.</figcaption></figure>',
+    mobile: '<figure class="work-visual" role="group" aria-label="Étapes fictives d’une mise à jour d’application mobile et compatibilité des anciennes versions.">' +
+      '<div class="wv-title"><strong>Une version mobile ne paraît pas partout en même temps</strong><span class="wv-note">Exemple pédagogique fictif</span></div>' +
+      '<div class="wv-flow"><div class="wv-flow-step"><b>1 · Préparer</b>Version et notes de mise à jour.</div><div class="wv-flow-step"><b>2 · Tester</b>TestFlight et piste interne Google.</div><div class="wv-flow-step"><b>3 · Soumettre</b>Envoyer aux stores pour examen.</div><div class="wv-flow-step"><b>4 · Publier</b>Apple et Google valident à leur rythme.</div><div class="wv-flow-step"><b>5 · Suivre</b>Des utilisateurs gardent l’ancienne version.</div></div>' +
+      '<div class="wv-state good"><b>À anticiper :</b> le serveur doit rester compatible avec les anciennes versions, ou l’application doit guider l’utilisateur vers la mise à jour.</div><figcaption>Prévoir le délai de validation des stores et tester sur les deux plateformes.</figcaption></figure>',
+    rgpd: '<figure class="work-visual" role="group" aria-label="Cycle de vie simplifié d’une donnée personnelle, de la collecte à la suppression.">' +
+      '<div class="wv-title"><strong>Cycle de vie d’une donnée personnelle</strong><span class="wv-note">Exemple fictif · à adapter avec le référent RGPD</span></div>' +
+      '<div class="wv-flow"><div class="wv-flow-step"><b>1 · Collecter</b>Pourquoi cette donnée est-elle nécessaire ?</div><div class="wv-flow-step"><b>2 · Informer</b>Expliquer l’usage et la base légale.</div><div class="wv-flow-step"><b>3 · Protéger</b>Limiter les accès et les partages.</div><div class="wv-flow-step"><b>4 · Conserver</b>Définir une durée adaptée.</div><div class="wv-flow-step"><b>5 · Effacer</b>Répondre aux demandes et supprimer à l’échéance.</div></div>' +
+      '<figcaption>À chaque étape : ne traiter que les données nécessaires et documenter les choix dans le registre.</figcaption></figure>',
+    devis: '<figure class="work-visual" role="group" aria-label="Exemple fictif de devis annoté pour une évolution de rappel par e-mail.">' +
+      '<div class="wv-title"><strong>Devis · Rappel e-mail aux pros</strong><span class="wv-note">Exemple pédagogique fictif</span></div>' +
+      '<div class="wv-table"><table><thead><tr><th>Poste</th><th>Jours</th><th>À vérifier</th></tr></thead><tbody>' +
+      '<tr><td>Cadrage et conception</td><td>0,5</td><td>Les critères d’acceptation sont-ils repris ?</td></tr>' +
+      '<tr><td>Développement + préférence de désactivation</td><td>2</td><td>Le rappel peut-il être désactivé ?</td></tr>' +
+      '<tr><td>Modèle d’e-mail</td><td>0,5</td><td>Qui fournit le texte ?</td></tr>' +
+      '<tr><td>Tests et recette</td><td>0,5</td><td>Cas du rappel unique inclus ?</td></tr>' +
+      '<tr><td>Mise en production</td><td>0,5</td><td>Créneau et retour arrière prévus ?</td></tr>' +
+      '<tr><td>Notification mobile</td><td>Exclue</td><td class="wv-warn">À chiffrer séparément</td></tr></tbody></table></div>' +
+      '<div class="wv-total"><span><b>Total :</b> 4 jours × 600 € HT = 2 400 € HT</span><span><b>À clarifier :</b> maintenance et garantie</span></div>' +
+      '<figcaption>Avant de comparer deux prix, vérifie que les mêmes tâches et exclusions sont couvertes.</figcaption></figure>',
+    projet: '<figure class="work-visual" role="group" aria-label="Exemple fictif de tableau de suivi de projet avec quatre colonnes.">' +
+      '<div class="wv-title"><strong>Suivi de l’évolution « rappel e-mail »</strong><span class="wv-note">Exemple pédagogique fictif</span></div>' +
+      '<div class="wv-board">' +
+      '<div class="wv-column"><h4>À faire · 2</h4><div class="wv-card">Valider le texte de l’e-mail<small>Équipe métier</small></div><div class="wv-card">Confirmer le périmètre mobile<small>À arbitrer</small></div></div>' +
+      '<div class="wv-column"><h4>En cours · 1</h4><div class="wv-card">Développer le rappel<small>Prestataire · échéance 12/11</small></div></div>' +
+      '<div class="wv-column"><h4>À tester · 1</h4><div class="wv-card">Désactivation des rappels<small>Recette à préparer</small></div></div>' +
+      '<div class="wv-column"><h4>Terminé · 1</h4><div class="wv-card">Critères d’acceptation<small>Validés</small></div></div></div>' +
+      '<figcaption>Une carte peut préciser l’action, la personne responsable et, si nécessaire, une échéance.</figcaption></figure>',
+    bugs: '<figure class="work-visual" role="group" aria-label="Exemple fictif de ticket de bug et comparaison entre résultat attendu et obtenu.">' +
+      '<div class="wv-title"><strong>Ticket · Le bouton Envoyer ne répond pas</strong><span class="wv-note">Exemple pédagogique fictif</span></div>' +
+      '<div class="wv-ticket"><div class="wv-panel"><h4>Signalement reproductible</h4><p><b>Compte :</b> mentor de test</p><p><b>Appareil :</b> iPhone · Safari</p><p><b>Étapes :</b> ouvrir une conversation, saisir un message, appuyer sur « Envoyer ».</p><p><b>Gravité :</b> majeure · <b>Priorité :</b> haute</p></div>' +
+      '<div class="wv-panel wv-screen"><h4>Écran observé</h4><div class="wv-browser">jobirl.example / conversation</div><div class="wv-app-card">Votre message<br><span class="wv-button">Envoyer</span></div><div class="wv-state good"><b>Attendu :</b> le message apparaît dans la conversation.</div><div class="wv-state bad"><b>Obtenu :</b> rien ne se passe après le clic.</div></div></div>' +
+      '<figcaption>Une maquette de l’écran aide à visualiser le problème ; le ticket ajoute le contexte et les étapes pour le reproduire.</figcaption></figure>'
+  };
+
+  /* Un exemple visuel par rubrique ; contenu local, sans ressource extérieure. */
+  function cvFigure(title, body, caption, kind) {
+    return '<figure class="course-visual"><div class="cv-heading"><strong>' + esc(title) + '</strong><span>' + (kind || 'Schéma explicatif') + '</span></div>' + body + '<figcaption>' + esc(caption) + '</figcaption></figure>';
+  }
+  function cvFlow(title, steps, caption) {
+    return cvFigure(title, '<ol class="cv-flow">' + steps.map(function (step, i) {
+      return '<li><span class="cv-number">' + (i + 1) + '</span><strong>' + esc(step[0]) + '</strong><span>' + esc(step[1]) + '</span></li>';
+    }).join('') + '</ol>', caption);
+  }
+  function cvCompare(title, cases, caption) {
+    return cvFigure(title, '<div class="cv-compare">' + cases.map(function (item, i) {
+      return '<div class="cv-case cv-case-' + (i % 3) + '"><strong>' + esc(item[0]) + '</strong><p>' + esc(item[1]) + '</p><span class="cv-outcome">' + esc(item[2]) + '</span></div>';
+    }).join('') + '</div>', caption);
+  }
+  function cvScreen(title, fields, caption) {
+    return cvFigure(title, '<div class="cv-window"><div class="cv-chrome"><span aria-hidden="true">● ● ●</span> Espace de travail · démonstration</div><div class="cv-screen-layout"><div class="cv-sidebar" aria-hidden="true">Tableau de bord<br>Demandes<br>Contenus<br>Paramètres</div><dl class="cv-fields">' + fields.map(function (f) {
+      return '<div><dt>' + esc(f[0]) + '</dt><dd>' + esc(f[1]) + '</dd></div>';
+    }).join('') + '</dl></div></div>', caption, 'Maquette statique · données fictives');
+  }
+  function cvTable(title, headers, rows, caption) {
+    return cvFigure(title, '<div class="cv-scroll" tabindex="0" role="region" aria-label="' + esc(title) + ' : tableau défilable"><table><thead><tr>' + headers.map(function(h){return '<th scope="col">'+esc(h)+'</th>';}).join('') + '</tr></thead><tbody>' + rows.map(function(row){return '<tr>'+row.map(function(cell,i){return (i ? '<td>' : '<th scope="row">')+esc(cell)+(i ? '</td>' : '</th>');}).join('')+'</tr>';}).join('') + '</tbody></table></div>', caption, 'Exemple pédagogique fictif');
+  }
+  function cvConsole(title, tabs, lines, caption) {
+    return cvFigure(title, '<div class="cv-devtools"><div class="cv-devtabs">' + tabs.map(function(tab,i){return '<span'+(i===0?' class="cv-active"':'')+'>'+esc(tab)+'</span>';}).join('') + '</div><div class="cv-code">' + lines.map(function(line){return '<div><code>'+esc(line)+'</code></div>';}).join('') + '</div></div>', caption, 'Interface reconstituée · exemple fictif');
+  }
+  function cvBars(title, values, unit, caption) {
+    var max = Math.max.apply(null, values.map(function(v){return v[1];}));
+    return cvFigure(title, '<div class="cv-bars">' + values.map(function(v){return '<div><div class="cv-bar-label"><span>'+esc(v[0])+'</span><strong>'+esc(v[1]+' '+unit)+'</strong></div><div class="cv-track"><span style="width:'+(max ? v[1]/max*100 : 0)+'%"></span></div></div>';}).join('')+'</div>', caption, 'Chiffres fictifs · échelle commune');
+  }
+  function cvPhone(title, content, caption) {
+    return cvFigure(title, '<div class="cv-phone"><div class="cv-phone-top" aria-hidden="true">9:41 ━ ●</div><div class="cv-phone-title">'+esc(title)+'</div>'+content.map(function(item){return '<div class="cv-phone-card"><strong>'+esc(item[0])+'</strong><p>'+esc(item[1])+'</p></div>';}).join('')+'<div class="cv-phone-bottom" aria-hidden="true"></div></div>', caption, 'Écran mobile fictif · maquette statique');
+  }
+  function cvChecklist(title, items, caption) {
+    return cvFigure(title, '<ul class="cv-checklist">'+items.map(function(item){return '<li><span class="cv-check '+(item[0]?'cv-checked':'cv-pending')+'" aria-label="'+(item[0]?'Vérifié':'À vérifier')+'">'+(item[0]?'✓':'○')+'</span><div><strong>'+esc(item[1])+'</strong><span>'+esc(item[2])+'</span></div></li>';}).join('')+'</ul>', caption, 'Exemple de contrôle · données fictives');
+  }
+  function cvSearch(title, result, caption) {
+    return cvFigure(title, '<div class="cv-search"><div class="cv-search-query">Recherche : '+esc(result[0])+'</div><div class="cv-search-url">jobirl.example › orientation</div><div class="cv-search-title">'+esc(result[1])+'</div><p>'+esc(result[2])+'</p></div>', caption, 'Résultat de recherche fictif');
+  }
+  var COURSE_VISUALS = {
+    vocab: [
+      cvScreen('Ce que voit le jeune', [['Page','Trouver un professionnel'],['Recherche','Métier, secteur, région'],['Résultat','Fiche du pro et accès à la messagerie']], 'Le front-end présente les informations et reçoit les actions de l’utilisateur.'),
+      cvFlow('Ce que fait le serveur', [['Demande','Un message est envoyé'],['Contrôle','Le compte peut-il écrire ?'],['Traitement','Enregistrer et notifier']], 'Le back-end applique les règles, même si elles ne sont pas visibles à l’écran.'),
+      cvTable('Les données sont organisées', ['Comptes','Rôle','État'], [['jeune.test','Jeune','Actif'],['pro.test','Pro','Validé'],['mentor.test','Mentor','Actif']], 'Une table regroupe des informations structurées. Les comptes présentés sont fictifs.'),
+      cvFlow('Du téléphone au serveur', [['Téléphone','Ouvre le site'],['Internet','Transporte la demande'],['Hébergeur','Fait fonctionner le serveur']], 'L’hébergement fournit les ressources qui rendent le service accessible.'),
+      cvFlow('Retrouver un site grâce au DNS', [['Adresse','jobirl.example'],['DNS','Cherche l’adresse du serveur'],['Serveur','Renvoie la page']], 'Le nom de domaine est le nom lisible ; le DNS aide à retrouver sa destination.'),
+      cvCompare('Connexion protégée ou alerte', [['HTTPS valide','Le navigateur peut vérifier le certificat.','Échange chiffré'],['Certificat expiré','Le navigateur affiche un avertissement.','Faire intervenir le responsable']], 'Le certificat a une durée de validité ; il faut suivre son renouvellement.'),
+      cvFlow('Un échange par API', [['Application','Demande les offres de stage'],['API','Vérifie et traite la demande'],['Réponse','Renvoie les offres à afficher']], 'L’API relie des logiciels ; ce n’est pas l’écran que voit l’utilisateur.'),
+      cvScreen('Modifier un contenu sans coder', [['Fiche','Stage de découverte'],['Texte','Description de l’offre'],['Publication','Brouillon → publié']], 'Le back-office permet aux équipes autorisées de gérer les contenus.'),
+      cvCompare('Trois environnements distincts', [['Local','Développer sur son ordinateur.','Développeur'],['Préproduction','Vérifier avec de faux comptes.','Recette'],['Production','Accueillir les vrais utilisateurs.','Service en ligne']], 'Une validation en préproduction précède la mise en ligne.'),
+      cvFlow('Déployer avec une issue de secours', [['Préparer','Version et sauvegarde'],['Publier','Installer la nouvelle version'],['Vérifier','Parcours essentiels'],['Revenir si besoin','Restaurer la version précédente']], 'Un déploiement doit prévoir les vérifications et le retour arrière.'),
+      cvConsole('Une branche pour préparer une évolution', ['Historique Git','Branches'], ['main       ●────●────────────●  version validée','                ╲           ╱','rappel-mail      ●────●────●   développement et revue'], 'Les points représentent des versions enregistrées ; la branche rejoint la version commune après revue.'),
+      cvCompare('Pourquoi une ancienne page reste visible', [['Sans cache','Le navigateur redemande les ressources.','Plus d’échanges'],['Avec cache','Il réutilise une copie déjà conservée.','Plus rapide, parfois ancien']], 'Une navigation privée ou un rechargement adapté aide à comparer le comportement.'),
+      cvPhone('Trouver un pro', [['Recherche','Métier · région'],['Résultats','Les fiches passent sur une colonne.'],['Navigation','Les commandes restent lisibles.']], 'Un écran responsive réorganise le contenu selon la largeur disponible.'),
+      cvCompare('Trois manières de proposer une application', [['Web','S’ouvre dans le navigateur.','Un lien suffit'],['Native','Installée depuis un store, adaptée au système.','iOS ou Android'],['Hybride','Combine technologies web et application installée.','À préciser avec le prestataire']], 'Demander la technologie réelle avant d’évaluer le coût et le périmètre.'),
+      cvTable('Les droits suivent le rôle', ['Action','Jeune','Pro','Administrateur'], [['Envoyer un message','Autorisé','Autorisé','Selon les droits'],['Publier une offre','Non','Si validé','Selon les droits'],['Gérer les comptes','Non','Non','Autorisé']], 'Exemple de matrice de droits à confirmer pour chaque plateforme.'),
+      cvConsole('Retrouver un événement dans les logs', ['Journal serveur'], ['14:05:12 INFO  demande reçue : /messages','14:05:12 ERROR envoi impossible : référence incident 42','14:06:03 INFO  nouvelle tentative reçue'], 'L’heure et l’URL du signalement permettent de rechercher les événements associés.'),
+      cvCompare('Bug ou régression ?', [['Bug','Le formulaire échoue dans la version actuelle.','Comportement incorrect'],['Régression','Il fonctionnait avant la dernière livraison.','Comportement devenu incorrect']], 'Une régression est un bug apparu après un changement.'),
+      WORK_VISUALS.devs
+    ],
+    bugs: [
+      null,
+      cvPhone('Reproduire : publier une offre', [['1 · Se connecter','Compte pro de test'],['2 · Remplir','Titre : Stage découverte · lieu renseigné'],['3 · Publier','Erreur affichée : publication impossible']], 'Refaire exactement ces étapes, puis noter si le problème revient.'),
+      cvTable('Changer un seul paramètre à la fois', ['Essai','Navigateur','Compte','Résultat'], [['Référence','Safari iPhone','pro.test','KO'],['Autre navigateur','Chrome iPhone','pro.test','KO'],['Autre appareil','Chrome ordinateur','pro.test','OK'],['Autre compte','Safari iPhone','pro2.test','KO']], 'Ces essais orientent le diagnostic vers le mobile ; ils ne prouvent pas encore la cause.'),
+      cvScreen('Les repères à joindre au signalement', [['URL','https://jobirl.example/offres/nouvelle'],['Appareil','iPhone de test · iOS'],['Navigateur','Safari · version à relever'],['Compte / heure','Pro de test · mardi 14 h 05']], 'Ces informations aident le prestataire à retrouver les mêmes conditions.'),
+      cvPhone('Capture annotée : point de blocage', [['1 · Offre complétée','Les champs obligatoires sont remplis.'],['2 · Action observée','[ Publier l’offre ] ← zone à montrer'],['3 · Problème visible','« Une erreur est survenue » après le clic.']], 'Cadrer la zone utile ; pour un enchaînement, filmer les étapes avec des données de test.'),
+      cvConsole('Ouvrir l’onglet Console', ['Console','Réseau','Éléments'], ['> clic sur « Envoyer »','× TypeError: impossible de lire une propriété','  à l’action d’envoi · ligne 42'], 'Exemple d’erreur JavaScript fictive : transmettre le message et les étapes sans déduire la cause.'),
+      cvTable('Lire une requête dans Réseau', ['Requête','Statut','Lecture'], [['GET /profil','200','Réponse reçue normalement'],['GET /ancienne-page','301','Redirection'],['POST /admin','403','Accès refusé'],['GET /offre-inconnue','404','Ressource introuvable'],['POST /messages','500','Erreur serveur']], 'La ligne en échec et son heure sont utiles au prestataire ; masquer les données sensibles.'),
+      WORK_VISUALS.bugs,
+      cvCompare('Gravité et priorité ne répondent pas à la même question', [['Gravité','L’inscription est impossible.','Impact : bloquant'],['Priorité','Le forum commence demain.','Traitement : au plus vite']], 'Le contexte métier détermine l’urgence ; la gravité décrit l’impact du défaut.'),
+      cvChecklist('Non-régression après la correction', [[true,'Connexion','Le compte de test se connecte.'],[true,'Profil','Les modifications restent enregistrées.'],[false,'Messagerie','Envoi et réception à vérifier.'],[false,'Offres','Publication à vérifier.']], 'Repasser aussi les fonctions proches de celle qui a été modifiée.'),
+      cvFlow('Continuer à utiliser le service', [['Blocage','L’application ne publie pas l’offre'],['Alternative','Publier depuis le site fonctionne'],['Information','Prévenir le pro'],['Suivi','Conserver le ticket ouvert']], 'Le contournement réduit la gêne pendant la correction ; il ne résout pas le défaut.'),
+      cvFlow('Quand fermer le ticket ?', [['Corrigé annoncé','Le prestataire livre'],['Retest préprod','Refaire les étapes'],['Vérification prod','Contrôler après mise en ligne'],['Fermeture','Prévenir la personne']], '« Corrigé » ne signifie pas encore « vérifié ».'),
+      cvFlow('Transformer les problèmes répétés en amélioration', [['Signalements','Plusieurs questions identiques'],['Analyse','Repérer le point commun'],['Réponse durable','FAQ, procédure ou évolution'],['Mesure','Vérifier que les demandes diminuent']], 'Les incidents récurrents alimentent la documentation et les prochains développements.')
+    ],
+    devs: [
+      cvCompare('Transformer une demande en besoin', [['Demande imprécise','« Mettez un bouton rouge. »','Solution déjà imposée'],['Besoin explicite','« Les jeunes ne voient pas les réponses. »','Résultat recherché à discuter']], 'Le développeur peut proposer une solution adaptée quand le problème est clair.'),
+      cvFlow('Construire une user story', [['Qui ?','En tant que pro bénévole'],['Quoi ?','Je veux recevoir un rappel'],['Pourquoi ?','Afin de répondre au jeune']], 'Les trois parties relient la fonction à une personne et à un bénéfice.'),
+      cvCompare('Un critère vérifiable', [['Étant donné','Un message non lu depuis 7 jours.','Situation de départ'],['Quand','La tâche quotidienne est exécutée.','Déclencheur'],['Alors','Un seul e-mail de rappel est reçu.','Résultat à tester']], 'Ces trois éléments deviennent un scénario du cahier de recette.'),
+      cvChecklist('Ce que signifie « terminé »', [[true,'Développement','Fonction disponible en préproduction.'],[true,'Recette','Critères vérifiés.'],[false,'Compatibilité','Application mobile à contrôler.'],[false,'Documentation','Guide à mettre à jour.']], 'Une tâche n’est terminée qu’une fois les conditions communes remplies.'),
+      WORK_VISUALS.devs,
+      cvCompare('Choisir le canal', [['Ticket','Demande, critères, statut et décisions.','Trace de référence'],['Messagerie','Question rapide pour débloquer.','Reporter la décision au ticket'],['Réunion','Arbitrage ou clarification complexe.','Compte rendu ensuite']], 'Le canal de discussion peut changer ; la décision doit rester retrouvable.'),
+      cvFlow('Centraliser les demandes', [['Équipes','Mentorat, terrain, communication'],['Responsable digital','Regroupe et clarifie'],['Arbitrage','Priorité et budget'],['Prestataire','Une demande cohérente']], 'Centraliser évite les instructions contradictoires.'),
+      cvScreen('Un compte rendu utile', [['Décision','Tester le rappel en préproduction'],['Action / responsable','Préparer les comptes · équipe métier'],['Échéance','Avant la démonstration'],['Blocage','Texte de l’e-mail attendu']], 'Le prochain point commence par le suivi de ces actions.'),
+      cvBars('Comprendre le chiffrage par tâche', [['Développement',2],['Modèle e-mail',0.5],['Recette',0.5],['Mise en ligne',0.5]], 'jour(s)', 'Exemple partiel : demander aussi le cadrage et les hypothèses de l’estimation.'),
+      cvChecklist('Questions avant d’accepter une proposition', [[false,'Périmètre','Le site et l’application sont-ils couverts ?'],[false,'Effets de bord','Quelles fonctions faut-il retester ?'],[false,'Livraison','Quel délai, quelle garantie, quel retour arrière ?']], 'Chaque réponse doit préciser ce qui sera livré et vérifié.'),
+      cvFlow('Une idée arrive pendant le développement', [['Nouvelle idée','Ajouter aussi une notification mobile'],['Arbitrage','Indispensable maintenant ?'],['Planification','Sinon, prochaine version'],['Validation','Chiffrer tout ajout retenu']], 'L’idée est conservée sans élargir silencieusement la livraison.'),
+      cvCompare('Traduire un changement pour les équipes', [['Message technique','« L’API de rappel est déployée. »','Peu concret pour les équipes'],['Message métier','« Les pros reçoivent un rappel après 7 jours sans lecture. »','Effet compréhensible']], 'Expliquer ce qui change dans l’usage et où trouver de l’aide.'),
+      cvFlow('Construire une relation de travail', [['Accord','Besoin et contraintes partagés'],['Visibilité','Avancement et blocages signalés'],['Échange','Démonstration et retours précis'],['Suivi','Décisions écrites et engagements tenus']], 'La confiance se construit par des échanges réguliers et des faits vérifiables.')
+    ],
+    devis: [
+      cvCompare('Deux modes de facturation', [['Forfait','Périmètre décrit → prix convenu.','Définir précisément les livrables'],['Régie','Temps réellement passé × tarif.','Prévoir suivi et plafond']], 'Comparer le risque de variation du périmètre et celui du temps consommé.'),
+      cvFlow('Lire le calcul du prix', [['Charge','4 jours de travail'],['TJM','600 € HT par jour'],['Total','2 400 € HT']], 'Le nombre de jours et le tarif journalier forment le prix hors taxes.'),
+      WORK_VISUALS.devis,
+      cvChecklist('Les lignes parfois absentes du devis', [[false,'Tests et recette','Qui réalise et corrige les tests ?'],[false,'Application mobile','Incluse ou exclue ?'],[false,'Mise en production','Sauvegarde et retour arrière prévus ?'],[false,'Après livraison','Garantie, maintenance et formation précisées ?']], 'Une exclusion peut transformer le coût réel du projet.'),
+      cvFlow('Passer du HT au TTC', [['Prix HT','2 400 €'],['TVA fictive à 20 %','480 €'],['Total TTC','2 880 €']], 'Exemple de calcul ; vérifier le taux applicable et la récupération éventuelle avec la comptabilité.'),
+      cvTable('Comparer à périmètre égal', ['Poste','Prestataire A','Prestataire B'], [['Développement','Inclus','Inclus'],['Recette','Non précisée','Incluse'],['Application mobile','Exclue','Incluse'],['Prix HT','4 000 €','6 000 €']], 'Les prix seuls ne permettent pas de conclure : clarifier les différences avant de choisir.'),
+      cvCompare('Réduire le coût en ajustant le besoin', [['Version complète','Rappel e-mail + SMS + notification.','Chiffrage plus élevé'],['Première version','Rappel e-mail seulement.','Autres canaux planifiés ensuite']], 'Discuter des fonctionnalités et des risques avant de négocier le tarif.'),
+      cvFlow('Un ajout doit être accepté avant le travail', [['Demande','Ajouter un filtre par région'],['Avenant','Prix et délai complémentaires'],['Validation','Accord écrit'],['Exécution','Développement du complément']], 'L’avenant rend visible l’effet de l’ajout sur le budget et le planning.'),
+      cvFlow('Du devis au paiement', [['Valider','Budget et périmètre'],['Signer','Devis ou commande'],['Recetter','Livraison vérifiée'],['Rapprocher','Facture et devis']], 'Vérifier ce qui a réellement été livré avant de valider la facture.')
+    ],
+    contrat: [
+      cvCompare('Trois contenus possibles de la TMA', [['Corrective','Réparer une anomalie.','Le formulaire ne sauvegarde plus'],['Préventive','Anticiper les incidents.','Mise à jour de sécurité'],['Évolutive','Faire une petite amélioration.','Ajouter un filtre']], 'Le contrat doit préciser les catégories incluses et le volume disponible.'),
+      cvTable('Prise en charge ≠ résolution', ['Incident fictif','Prise en charge','Résolution'], [['Bloquant','Sous 4 heures ouvrées','Délai à contractualiser'],['Majeur','Sous 1 jour ouvré','Délai à contractualiser'],['Mineur','Sous 5 jours ouvrés','Délai à contractualiser']], 'Ces délais sont illustratifs : lire ceux du contrat, ses horaires et ses exclusions.'),
+      WORK_VISUALS.contrat,
+      cvCompare('Identifier ce qui est cédé', [['Développement spécifique','Droits à préciser dans le contrat.','Clause à faire vérifier'],['Brique open source','Licence propre à chaque composant.','Conditions à respecter']], 'L’accès au dépôt de code et la propriété juridique sont deux points à vérifier séparément.'),
+      cvChecklist('Préparer un changement de prestataire', [[false,'Code','Dépôt accessible et historique disponible.'],[false,'Données','Export exploitable et documenté.'],[false,'Comptes','Domaine, hébergeur et stores maîtrisés.'],[false,'Documentation','Installation et exploitation décrites.']], 'La réversibilité se prépare avant la fin de la relation.'),
+      cvTable('Inventaire des accès, sans mots de passe', ['Service','Titulaire','Responsable','Départ'], [['Hébergement','Association','Référent technique','Retirer l’accès nominatif'],['Store mobile','Association','Responsable digital','Revoir les droits'],['Dépôt de code','Association','Équipe technique','Désactiver le compte']], 'Les secrets restent dans un gestionnaire de mots de passe adapté.'),
+      cvFlow('Encadrer les données confiées à un prestataire', [['Identifier','Quelles données et quels usages ?'],['Formaliser','Contrat et instructions'],['Contrôler','Sécurité et accès'],['Terminer','Restitution ou suppression prévue']], 'Faire vérifier les dispositions adaptées avec le référent juridique ou RGPD.'),
+      cvScreen('Compte rendu mensuel de maintenance', [['Tickets','8 traités · 2 encore ouverts'],['Temps','2 jours consommés sur 3'],['Prévention','Mise à jour appliquée'],['À suivre','Erreur d’envoi récurrente']], 'Relier le temps consommé aux travaux, aux incidents et aux actions suivantes.')
+    ],
+    projet: [
+      cvFlow('Le projet de bout en bout', [['Cadrer','Problème et résultat'],['Concevoir','Maquette et critères'],['Développer','Fonction réalisée'],['Recetter','Résultat vérifié'],['Accompagner','Mise en ligne et suivi']], 'Chaque étape prépare la suivante et laisse une trace de validation.'),
+      cvScreen('Une fiche de cadrage sur une page', [['Objectif','Augmenter les réponses des pros'],['Public','Pros recevant des messages'],['Périmètre','Rappel e-mail, sans SMS'],['Contraintes','Budget et date à valider'],['Réussite','Évolution du taux de réponse']], 'Valider cette base avant le devis et le développement.'),
+      WORK_VISUALS.projet,
+      cvCompare('Backlog et roadmap', [['Backlog','Liste détaillée des demandes à trier.','Idées et tickets'],['Roadmap','Grandes étapes dans le temps.','Direction et jalons']], 'Un ticket peut rester dans le backlog sans être engagé dans la prochaine livraison.'),
+      cvCompare('Choisir une première version utile', [['MVP','Un rappel e-mail, un lien vers la conversation.','Tester le bénéfice rapidement'],['Ensuite','SMS, notification mobile, personnalisation.','Enrichir selon les résultats']], 'Le MVP doit déjà rendre un service complet sur un périmètre réduit.'),
+      cvTable('Partir de la date à tenir', ['Avant le lancement','Travail','Condition'], [['Semaine −4','Cadrage et devis','Périmètre accepté'],['Semaine −3 à −2','Développement','Disponibilité prestataire'],['Semaine −1','Recette et correction','Comptes prêts'],['Jour J','Mise en ligne','Go / no-go']], 'Exemple fictif de rétroplanning ; garder une marge pour les imprévus.'),
+      cvTable('Clarifier les responsabilités', ['Action','Prépare','Valide'], [['Besoin','Responsable digital','Équipe métier'],['Budget','Responsable digital','Direction'],['Développement','Prestataire','Recette métier'],['Mise en ligne','Équipe technique','Responsable du lancement']], 'Cette répartition est illustrative : faire confirmer les responsabilités réelles.'),
+      cvCompare('Lire la météo du projet', [['Vert · maîtrisé','Développement et recette suivent le plan.','Continuer'],['Orange · risque','Texte attendu, marge réduite.','Attribuer une action'],['Rouge · blocage','Pas de compte store disponible.','Arbitrer et revoir la date']], 'Chaque alerte doit avoir un responsable et une prochaine action.'),
+      cvFlow('Accompagner un changement', [['Avant','Informer de ce qui va changer'],['Pendant','Démontrer et faire essayer'],['Après','Répondre et recueillir les retours']], 'La mise en ligne est aussi un changement d’habitudes pour les équipes.'),
+      cvTable('Faire le bilan', ['Question','Constat fictif','Suite'], [['Objectif atteint ?','Plus de réponses à mesurer','Comparer sur une période définie'],['Planning tenu ?','Recette sous-estimée','Prévoir plus de marge'],['À conserver ?','Démos courtes utiles','Garder le rythme']], 'Le bilan sert à améliorer le prochain projet.')
+    ],
+    recette: [
+      cvTable('Une ligne de cahier de recette', ['Étapes','Attendu','Obtenu','Statut'], [['Message non lu depuis 7 jours','Un rappel reçu','Un rappel reçu','OK'],['Relancer le lendemain','Aucun second rappel','Second rappel reçu','KO → ticket']], 'Chaque ligne part d’un critère d’acceptation et conserve le résultat observé.'),
+      cvCompare('Tester avec les différents rôles', [['Jeune de test','Recherche et premier message.','Données fictives'],['Pro de test','Réponse, offre et préférences.','Données fictives'],['Administrateur de test','Gestion des contenus et droits.','Préproduction']], 'Ajouter les autres rôles réellement présents sur la plateforme.'),
+      cvChecklist('Une fonction, plusieurs angles de test', [[false,'Fonctionnel','Le rappel arrive comme prévu.'],[false,'Cas limite','Un champ vide est géré.'],[false,'Mobile et clavier','Les commandes restent utilisables.'],[false,'Non-régression','Les messages habituels arrivent toujours.']], 'Cocher un type de test ne remplace pas les scénarios précis associés.'),
+      cvFlow('La boucle de correction', [['Test KO','Noter l’écart'],['Ticket','Décrire et classer'],['Correction','Recevoir une nouvelle version'],['Retest','Même scénario, puis tests voisins']], 'Si le résultat reste incorrect, le ticket retourne en correction.'),
+      cvScreen('Procès-verbal de recette', [['Version','Livraison 1.4 · préproduction'],['Décision','Validation avec réserves'],['Réserves','Deux défauts d’affichage mineurs'],['Engagement','Correction et date convenues par écrit']], 'Une anomalie majeure peut conduire à un refus ; la décision doit être explicite.'),
+      cvCompare('Décider la mise en ligne', [['GO','Recette validée, sauvegarde et équipe prêtes.','Créneau confirmé'],['NO-GO','Anomalie majeure ou retour arrière non prêt.','Reporter et fixer une suite']], 'La décision tient compte des risques et de la disponibilité des équipes.'),
+      WORK_VISUALS.recette,
+      cvChecklist('Vérifier juste après la mise en ligne', [[false,'Connexion','Le compte de contrôle se connecte.'],[false,'Parcours essentiel','Messagerie et offres fonctionnent.'],[false,'Surveillance','Erreurs et signalements suivis.'],[false,'Communication','Équipes informées du résultat.']], 'Ces contrôles en production complètent la recette faite avant le lancement.'),
+      cvScreen('Notes de version destinées aux équipes', [['Nouveau','Un rappel aide les pros à répondre'],['Pour les utilisateurs','Une préférence permet de le désactiver'],['Aide','Guide mis à jour et personne référente'],['Vigilance','Signaler tout rappel reçu en double']], 'Décrire les effets sur l’usage plutôt que les détails du code.')
+    ],
+    mobile: [
+      cvCompare('Deux espaces de publication', [['Apple','App Store Connect → App Store.','Compte de l’association'],['Google','Play Console → Google Play.','Compte de l’association']], 'Les accès et les responsabilités de publication doivent être connus.'),
+      WORK_VISUALS.mobile,
+      cvTable('Des utilisateurs sur plusieurs versions', ['Utilisateur fictif','Version installée','À vérifier'], [['Jeune A','1.3','Compatible avec le serveur'],['Jeune B','1.4','Nouvelle version reçue'],['Pro C','1.2','Mise à jour à accompagner']], 'La publication d’une version ne met pas instantanément tous les téléphones à jour.'),
+      cvFlow('Faire tester une version avant diffusion', [['Préparer','Une version candidate'],['Distribuer','TestFlight ou piste interne'],['Essayer','Scénarios sur vrais appareils'],['Corriger','Retester avant publication']], 'Les comptes et messages utilisés pour la démonstration sont fictifs.'),
+      cvPhone('Notification utile', [['JobIRL · maintenant','Un professionnel a répondu à votre message.'],['Préférences','Choisir les notifications à recevoir.']], 'La notification doit rendre un service et mener vers l’écran pertinent.'),
+      cvPhone('Fiche de l’application', [['Nom et promesse','Échanger avec des professionnels'],['Captures','Recherche · profil · conversation'],['Nouveautés','Description claire des changements']], 'La fiche doit représenter la version actuelle et expliquer son utilité.'),
+      cvScreen('Traiter un avis utilisateur', [['Avis','« Je n’arrive plus à me connecter. »'],['Réponse','Remercier et proposer le canal d’aide'],['Investigation','Relever appareil et version sans données privées'],['Suivi','Créer un ticket si le défaut est confirmé']], 'Ne pas demander de mot de passe ni publier de données personnelles dans la réponse.'),
+      cvTable('Rapport de plantage', ['Groupe fictif','Version','Appareil','Cas'], [['Fermeture à l’ouverture','1.4','Android','12 occurrences'],['Écran conversation','1.3','iOS','4 occurrences']], 'Les occurrences aident à prioriser ; elles ne donnent pas à elles seules la cause du plantage.'),
+      cvChecklist('Déclarations de données des stores', [[false,'Inventaire','Quelles données l’application utilise-t-elle ?'],[false,'Usage','Pour quelle fonction ?'],[false,'Cohérence','Déclaration et application concordent-elles ?'],[false,'Mise à jour','Revoir après chaque changement concerné.']], 'Vérifier la déclaration avec les responsables techniques et RGPD.')
+    ],
+    perf: [
+      cvTable('Lire un rapport de performance', ['Mesure','Observation fictive','Ce qu’elle décrit'], [['LCP','3,8 secondes','Affichage du contenu principal'],['INP','320 millisecondes','Réactivité aux interactions'],['CLS','0,18','Stabilité de l’affichage']], 'Ces mesures décrivent des expériences différentes ; faire analyser les causes avant de choisir une correction.'),
+      cvBars('Poids transféré sur une page', [['Images',2400],['Scripts',650],['Styles',90],['Texte',30]], 'Ko', 'Sur cet exemple, les images constituent la première piste d’allègement.'),
+      cvConsole('Une alerte de disponibilité', ['Surveillance'], ['08:00 ✓ page d’accueil accessible','08:05 × serveur indisponible','08:06 → alerte envoyée au responsable','08:12 ✓ service accessible à nouveau'], 'Suivre les interruptions et leur durée, puis faire analyser l’incident.'),
+      cvFlow('Une sauvegarde utile doit pouvoir être restaurée', [['Copier','Fichiers et base de données'],['Séparer','Stockage distinct du serveur'],['Restaurer','Essai en environnement isolé'],['Vérifier','Données et fonctions utilisables']], 'L’existence d’un fichier ne prouve pas que la restauration fonctionnera.'),
+      cvFlow('Préparer une mise à jour de sécurité', [['Identifier','Composant et risque'],['Préparer','Sauvegarde et créneau'],['Tester','En préproduction'],['Appliquer','Puis contrôler les parcours']], 'Le niveau d’urgence et les précautions dépendent du composant concerné.'),
+      cvCompare('Protéger les accès', [['Compte partagé','Identifiant utilisé par plusieurs personnes.','Actions difficiles à attribuer'],['Compte nominatif','Droits adaptés et double authentification.','Accès retiré au départ']], 'Conserver les secrets dans un outil adapté, jamais dans une capture de cours.'),
+      cvPhone('Repérer un message suspect', [['Expéditeur à vérifier','support@connexion-inconnue.example'],['Pression inhabituelle','« Votre compte ferme dans 10 minutes ! »'],['Lien à contrôler','Ne pas saisir ses identifiants depuis ce message.']], 'Exemple fictif de hameçonnage : vérifier par un canal connu avant d’agir.'),
+      cvCompare('Trois formes d’hébergement', [['Mutualisé','Ressources partagées.','Gestion souvent plus simple'],['Serveur privé virtuel','Environnement plus autonome.','Exploitation à prévoir'],['Cloud','Ressources et services ajustables.','Coûts et configuration à suivre']], 'Comparer les besoins de fiabilité, de sécurité et de gestion avant de choisir.'),
+      cvFlow('Traiter un incident', [['Constater','Impact et heure'],['Alerter','Responsable technique'],['Informer','Équipes et utilisateurs concernés'],['Résoudre','Suivre le rétablissement'],['Apprendre','Bilan et prévention']], 'En cas de données personnelles concernées, associer rapidement le référent RGPD à l’évaluation.')
+    ],
+    rgpd: [
+      cvCompare('Ce qui peut identifier une personne', [['Directement','Nom, e-mail ou photo.','Personne reconnaissable'],['Par recoupement','Établissement, ville et autres informations.','Identification parfois possible']], 'Une information peut devenir identifiante en combinaison avec d’autres.'),
+      WORK_VISUALS.rgpd,
+      cvTable('Relier un traitement à sa justification', ['Traitement fictif','Question à poser','Validation'], [['Newsletter','Sur quelle base repose cet envoi ?','Référent RGPD'],['Messagerie','Quelle base pour rendre le service ?','Référent RGPD'],['Facturation','Quelles obligations s’appliquent ?','Référent juridique']], 'La base légale se détermine pour chaque traitement ; elle ne se choisit pas au hasard.'),
+      cvFlow('Examiner un service destiné aux mineurs', [['Comprendre','Âge et usage du service'],['Identifier','Traitement et base légale'],['Vérifier','Accords requis avec le référent'],['Expliquer','Information compréhensible par le jeune']], 'Les règles dépendent du traitement ; le consentement n’est pas la base de tous les usages.'),
+      cvPhone('Choix des cookies', [['Nécessaires','Permettent le fonctionnement du service.'],['Optionnels','Vidéos et mesure non exemptée : choix préalable.'],['Choix présentés au même niveau','Tout refuser · Personnaliser · Tout accepter']], 'Maquette statique : les commandes de consentement doivent aussi fonctionner réellement.'),
+      cvFlow('Traiter une demande sur les données', [['Recevoir','Utiliser le canal prévu'],['Vérifier','Identité de manière proportionnée'],['Retrouver','Systèmes et prestataires concernés'],['Répondre','Exécuter et documenter la demande']], 'Les délais et exceptions se vérifient avec le référent RGPD.'),
+      cvTable('Un extrait de registre', ['Usage fictif','Données','Acteurs','À documenter'], [['Messagerie','Messages et comptes','Équipe habilitée, hébergeur','Finalité et conservation'],['Newsletter','E-mail et préférence','Équipe communication, outil d’envoi','Base et retrait']], 'Le registre décrit les traitements et les prestataires réellement utilisés.'),
+      cvPhone('Signaler un échange préoccupant', [['Conversation fictive','Un message semble inapproprié.'],['Action visible','Signaler ce message'],['Suite','Transmission à l’équipe habilitée selon la procédure.']], 'Le signalement doit mener à un traitement humain adapté et traçable.'),
+      cvChecklist('Questions avant une nouvelle fonction', [[false,'Nécessité','Avons-nous besoin de cette donnée ?'],[false,'Accès','Qui pourra la consulter ?'],[false,'Conservation','Quand sera-t-elle supprimée ?'],[false,'Risques','Quels contrôles prévoir avec le référent ?']], 'Poser ces questions au cadrage, avant que le développement soit engagé.')
+    ],
+    mesure: [
+      cvCompare('Deux sources à rapprocher', [['Outil d’audience','Visites, pages et provenance.','GA4 ou Matomo selon la configuration'],['Données de la plateforme','Inscriptions, messages et réponses.','Base ou tableau de bord métier']], 'Utiliser une définition et une période communes avant de comparer les chiffres.'),
+      cvFlow('De l’audience à l’impact', [['Audience','Des jeunes visitent'],['Usage','Ils échangent avec des pros'],['Impact','Leur orientation avance']], 'L’impact demande des éléments complémentaires, par exemple un questionnaire.'),
+      cvScreen('Un indicateur défini', [['Nom','Taux de messages recevant une réponse'],['Calcul','Messages répondus ÷ messages éligibles'],['Période','Fenêtre et délai d’observation à fixer'],['Source','Données de messagerie de la plateforme']], 'Définir précisément ce qui entre dans le calcul et éviter les doubles comptes.'),
+      cvBars('Lire un entonnoir : mêmes personnes, même période', [['Visite',1000],['Inscription',300],['Premier message',180],['Réponse reçue',90]], 'jeunes', 'Chiffres fictifs : la plus forte perte est avant l’inscription ; étudier les causes avant de conclure.'),
+      cvTable('Une moyenne peut cacher un problème', ['Appareil','Messages envoyés','Réponses reçues','Taux fictif'], [['Ordinateur','100','70','70 %'],['Téléphone','100','30','30 %'],['Ensemble','200','100','50 %']], 'La différence justifie une investigation ; elle ne prouve pas à elle seule une cause technique.'),
+      cvTable('Le plan de marquage', ['Action','Événement','Déclenchement'], [['Inscription réussie','inscription_reussie','Compte créé'],['Premier message envoyé','message_envoye','Enregistrement confirmé'],['Offre publiée','offre_publiee','Publication confirmée']], 'Mesurer la réussite de l’action et pas seulement un clic sur le bouton.'),
+      cvCompare('Un test A/B à analyser', [['Version A','« Contacter un pro » · 40 actions / 1 000 visites.','4 % observés'],['Version B','« Poser ma question » · 50 actions / 1 000 visites.','5 % observés']], 'Ces chiffres fictifs ne suffisent pas à déclarer un gagnant : vérifier la méthode et l’incertitude.'),
+      cvScreen('Tableau de bord mensuel', [['Usage','Messages envoyés : +12 %'],['Qualité','Délai de réponse : 3 jours'],['Analyse','À vérifier par appareil et région'],['Décision','Tester l’aide au premier message']], 'Un rapport utile relie les chiffres à une explication prudente et à une action.'),
+      cvCompare('Deux chiffres, deux usages', [['Total depuis la création','20 000 inscriptions cumulées.','Décrit une histoire'],['Actifs sur le mois','1 200 comptes actifs.','Aide à suivre l’usage actuel']], 'Définir « actif » et la période ; ne pas confondre stock historique et activité.')
+    ],
+    seo: [
+      cvFlow('Trois étapes côté moteur', [['Explorer','Le robot découvre la page'],['Indexer','Le moteur peut la conserver'],['Classer','Il choisit sa place pour une recherche']], 'Une page explorée n’est pas nécessairement indexée ni bien classée.'),
+      cvScreen('Inspection d’une URL · vue simplifiée', [['URL','https://jobirl.example/stages'],['Indexation','Page exclue : directive noindex'],['Dernière exploration','Date à consulter'],['Action','Vérifier si l’exclusion est souhaitée']], 'Maquette pédagogique de diagnostic, sans reproduire une interface actuelle de Google.'),
+      cvSearch('Title et description dans un résultat', ['stage de troisième','Trouver un stage de 3e | JobIRL','Découvrez des offres et préparez votre candidature avec des conseils adaptés.'], 'Le titre annonce le sujet ; la description donne envie de consulter. Le moteur peut réécrire cet affichage.'),
+      cvCompare('Trois outils, trois rôles', [['robots.txt','Indique des consignes d’exploration.','Ne garantit pas la désindexation'],['Sitemap','Liste des URL à signaler au moteur.','Aide à découvrir'],['noindex','Demande de ne pas indexer la page.','À vérifier sur les pages publiques']], 'Distinguer découverte et indexation avant de modifier les réglages.'),
+      cvFlow('Éviter de perdre une ancienne adresse', [['Ancienne URL','/ancien-guide'],['Redirection 301','Envoie vers la bonne page'],['Nouvelle URL','/guides/stage']], 'La canonical signale une URL de référence pour des contenus similaires ; elle ne remplace pas la redirection.'),
+      cvCompare('Un contenu utile à une recherche', [['Titre trop vague','« Découvrez notre univers ».','Intention peu claire'],['Titre concret','« Comment écrire à un professionnel ? »','Question identifiable']], 'Répondre précisément au besoin avec un contenu clair, structuré et à jour.'),
+      cvConsole('Données structurées : une description lisible par les outils', ['Description simplifiée'], ['Type : Article','Titre : Préparer sa recherche de stage','Date de mise à jour : à renseigner','Auteur : à identifier'], 'Ce schéma doit refléter le contenu visible ; il ne garantit pas un affichage enrichi.'),
+      cvChecklist('Avant et après une refonte', [[false,'Inventaire','Lister les URL et pages importantes.'],[false,'Correspondances','Préparer les redirections.'],[false,'Réglages','Contrôler noindex, canonical et sitemap.'],[false,'Suivi','Surveiller erreurs et indexation après publication.']], 'Le référencement fait partie du projet dès le cadrage de la refonte.'),
+      cvCompare('Aider les lecteurs et les outils à comprendre', [['Information vague','Affirmations générales sans source.','Difficile à vérifier'],['Information structurée','Réponse claire, source, auteur et date.','Plus facile à comprendre et à vérifier']], 'Ces pratiques peuvent aider la compréhension ; elles ne garantissent pas une citation par une IA.')
+    ],
+    former: [
+      cvTable('Partir des tâches des équipes', ['Équipe fictive','Tâche','Besoin de formation'], [['Mentorat','Associer un binôme','Atelier pratique'],['Terrain','Présenter la plateforme','Démonstration courte'],['Communication','Publier un contenu','Guide de référence']], 'Construire le programme à partir des tâches, pas à partir d’une liste de fonctionnalités.'),
+      cvCompare('Choisir un format adapté', [['Atelier','Apprendre en essayant.','Premier usage'],['Tutoriel court','Revoir un geste précis.','Besoin ponctuel'],['Guide / FAQ','Retrouver une réponse.','Autonomie au quotidien']], 'Plusieurs formats peuvent se compléter pour une même tâche.'),
+      cvPhone('Exemple de guide : publier une offre', [['Avant de commencer','Avoir un compte pro validé.'],['1 · Ouvrir « Mes offres »','Repère à montrer sur une capture.'],['2 · Créer puis vérifier','Renseigner les champs avant publication.'],['En cas d’erreur','Message rencontré et solution prévue.']], 'Une étape décrit une action et montre le repère utile sur l’interface.'),
+      cvFlow('Une procédure pour une situation sensible', [['Recevoir','Noter le signalement'],['Qualifier','Urgence et équipe compétente'],['Agir','Suivre les consignes écrites'],['Tracer','Action, responsable et suite']], 'La procédure définit qui agit et quand escalader la situation.'),
+      cvScreen('Les repères d’un guide fiable', [['Document','Publier une offre'],['Responsable','Équipe métier'],['Dernière vérification','Après la livraison concernée'],['À revoir','Capture de l’écran de publication']], 'Une évolution de l’interface doit déclencher la révision des pages concernées.'),
+      cvChecklist('Kit d’arrivée d’une nouvelle personne', [[true,'Accès','Compte nominatif et droits adaptés.'],[false,'Prise en main','Tâches essentielles à essayer.'],[false,'Documentation','Guide et procédures disponibles.'],[false,'Référent','Personne à contacter identifiée.']], 'Le kit doit permettre de commencer les tâches réelles avec un appui clair.'),
+      cvBars('Évolution des demandes répétées après formation', [['Avant : même tâche',20],['Après : même tâche',8]], 'demandes', 'Exemple fictif à périmètre comparable : compléter par l’observation de l’autonomie et les retours des personnes.'),
+      cvPhone('Message de remerciement aux pros', [['Votre contribution compte','Ce mois-ci, vos réponses ont aidé des jeunes.'],['Faciliter la prochaine réponse','Accès direct aux conversations en attente.'],['Un retour utile','Partager les résultats disponibles avec prudence.']], 'Valoriser l’engagement et simplifier la participation.'),
+      cvPhone('Aider un jeune à écrire son premier message', [['Point de départ','« Bonjour, je m’intéresse à votre métier… »'],['Question concrète','« À quoi ressemble une journée de travail ? »'],['Encouragement','Relire, personnaliser et envoyer.']], 'Un modèle donne un premier appui tout en laissant la personne s’exprimer.'),
+      cvFlow('Traiter un signalement avec cohérence', [['Signalement','Repérer le contenu concerné'],['Examen','Comparer à la charte'],['Décision','Agir selon la procédure'],['Trace','Documenter et informer si prévu']], 'Les situations sensibles doivent être traitées par les personnes habilitées.')
+    ]
+  };
+
   function openLesson(id) {
     var m = MODULES.filter(function (x) { return x.id === id; })[0], L = LESSONS[id];
     var n = MODULES.indexOf(m) + 1;
     var html = '<div class="lesson-head"><button class="back" id="backMods">← Tous les cours</button><span class="tag">Leçon ' + n + '</span><h2>' + esc(m.t) + '</h2></div>';
     html += '<p class="why">' + esc(L.why) + '</p>';
     if (L.schema) html += SCHEMA;
-    html += L.terms.map(function (t) {
-      return '<div class="term"><h3>' + esc(t.w) + ' <small>' + esc(t.s) + '</small></h3><p>' + esc(t.p) + '</p><p class="ex"><b>Exemple :</b> ' + esc(t.ex) + '</p><p class="say"><b>À dire</b>' + esc(t.say) + '</p></div>';
+    html += '<details class="course-toc"><summary>Dans ce cours · ' + L.terms.length + ' rubriques illustrées</summary><ol>' + L.terms.map(function(t, i) {
+      return '<li><a href="#lesson-' + id + '-' + i + '">' + esc(t.w) + '</a></li>';
+    }).join('') + '</ol></details>';
+    html += L.terms.map(function (t, i) {
+      var visual = t.visual || COURSE_VISUALS[id][i];
+      return '<div class="term" id="lesson-' + id + '-' + i + '"><h3>' + esc(t.w) + ' <small>' + esc(t.s) + '</small></h3><p>' + esc(t.p) + '</p>' + visual + '<p class="ex"><b>Exemple :</b> ' + esc(t.ex) + '</p><p class="say"><b>À dire</b>' + esc(t.say) + '</p></div>';
     }).join("");
     if (L.extra) html += L.extra;
     html += '<div class="minq" id="minq"><h3>Vérifie tes acquis</h3>' + L.quiz.map(function (q, qi) {
