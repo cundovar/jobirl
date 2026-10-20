@@ -1,0 +1,2027 @@
+<title>Révision JobIRL</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Source+Sans+3:wght@400;600;700&display=swap">
+<style>
+/* Layout : carnet de révision — barre d'onglets en haut, une colonne de lecture, cartes seulement pour ce qui se manipule */
+:root {
+  --bg: #f6f7f4;
+  --surface: #ffffff;
+  --ink: #1b2430;
+  --muted: #5b6573;
+  --line: #dde2e6;
+  --accent: #1f5f8b;
+  --accent-soft: #e3eef6;
+  --mark: #e8a317;
+  --mark-soft: #fdf2d8;
+  --good: #2e7d4f;
+  --good-soft: #e2f3e8;
+  --bad: #b23b3b;
+  --bad-soft: #f8e3e3;
+  --display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --body: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #12171d; --surface: #1a2129; --ink: #e8edf2; --muted: #9aa6b3; --line: #2c3540;
+    --accent: #7db7e0; --accent-soft: #1d3346; --mark: #f2b941; --mark-soft: #3a2f16;
+    --good: #6cc48f; --good-soft: #17301f; --bad: #e88080; --bad-soft: #3a1c1c; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #12171d; --surface: #1a2129; --ink: #e8edf2; --muted: #9aa6b3; --line: #2c3540;
+  --accent: #7db7e0; --accent-soft: #1d3346; --mark: #f2b941; --mark-soft: #3a2f16;
+  --good: #6cc48f; --good-soft: #17301f; --bad: #e88080; --bad-soft: #3a1c1c; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 16px; line-height: 1.55; }
+.wrap { max-width: 860px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 24px 64px; }
+h1, h2, h3 { font-family: var(--display); line-height: 1.15; text-wrap: balance; margin: 0; }
+h1 { font-size: clamp(1.9rem, 5vw, 2.6rem); font-weight: 700; }
+h2 { font-size: 1.45rem; font-weight: 700; }
+h3 { font-size: 1.08rem; font-weight: 700; }
+p { margin: 0; }
+a { color: var(--accent); }
+.lead { color: var(--muted); max-width: 62ch; margin-top: 8px; }
+.ticket { display: flex; flex-wrap: wrap; gap: 6px 18px; margin-top: 16px; padding: 12px 14px; border: 1px dashed var(--line); border-radius: 8px; background: var(--surface); font-size: .93rem; }
+.ticket b { font-weight: 700; }
+.ticket span { color: var(--muted); }
+
+nav { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--bg); margin-top: 22px; border-bottom: 1px solid var(--line); }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
+.tabs { display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none; }
+.tabs button { flex: 0 0 auto; font: 600 .95rem var(--body); color: var(--muted); background: none; border: 0; border-bottom: 3px solid transparent; padding: 12px 12px 10px; cursor: pointer; }
+.tabs button[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--mark); }
+.tabs button:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+section.view { display: grid; gap: 22px; padding-top: 24px; }
+.intro { color: var(--muted); max-width: 62ch; }
+
+/* Fiches */
+.topic { display: grid; gap: 10px; padding-bottom: 22px; border-bottom: 1px solid var(--line); }
+.topic:last-child { border-bottom: 0; }
+.tag { display: inline-block; font-size: .75rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--accent); }
+.topic ul { margin: 0; padding-left: 1.2em; display: grid; gap: 6px; max-width: 68ch; }
+.say { background: var(--mark-soft); border-left: 3px solid var(--mark); padding: 10px 14px; border-radius: 0 6px 6px 0; max-width: 68ch; }
+.say b { display: block; font-size: .78rem; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin-bottom: 2px; }
+.facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px; }
+.fact { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 12px; }
+.fact strong { display: block; font-family: var(--display); font-size: 1.35rem; font-variant-numeric: tabular-nums; }
+.fact span { color: var(--muted); font-size: .9rem; }
+
+/* Quiz */
+.qcard { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 20px; display: grid; gap: 14px; }
+.qmeta { display: flex; justify-content: space-between; color: var(--muted); font-size: .9rem; font-variant-numeric: tabular-nums; }
+.bar { height: 6px; background: var(--line); border-radius: 3px; overflow: hidden; }
+.bar i { display: block; height: 100%; background: var(--mark); width: 0; transition: width .3s; }
+.opts { display: grid; gap: 8px; }
+.opts button { text-align: left; font: 400 1rem var(--body); color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 11px 14px; cursor: pointer; }
+.opts button:hover:not(:disabled) { border-color: var(--accent); }
+.opts button.ok { background: var(--good-soft); border-color: var(--good); }
+.opts button.ko { background: var(--bad-soft); border-color: var(--bad); }
+.opts button:disabled { cursor: default; }
+.explain { padding: 12px 14px; border-radius: 8px; background: var(--accent-soft); }
+.row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.btn { font: 700 .95rem var(--body); color: #fff; background: var(--accent); border: 0; border-radius: 8px; padding: 10px 16px; cursor: pointer; }
+:root[data-theme="dark"] .btn { color: #0f1419; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .btn { color: #0f1419; } }
+.btn.ghost { background: none; color: var(--accent); border: 1px solid var(--line); }
+
+/* Entretien */
+details.q { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; }
+details.q summary { cursor: pointer; padding: 14px 16px; font-weight: 600; list-style: none; display: flex; gap: 10px; align-items: baseline; }
+details.q summary::-webkit-details-marker { display: none; }
+details.q summary::before { content: "+"; font-family: var(--display); color: var(--accent); width: 1em; flex: 0 0 auto; }
+details.q[open] summary::before { content: "–"; }
+details.q .ans { padding: 0 16px 16px 42px; display: grid; gap: 10px; max-width: 72ch; }
+.ans ol, .ans ul { margin: 0; padding-left: 1.2em; display: grid; gap: 5px; }
+.kind { font-size: .75rem; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); margin-left: auto; white-space: nowrap; }
+.filters { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { font: 600 .88rem var(--body); border: 1px solid var(--line); background: var(--surface); color: var(--ink); border-radius: 999px; padding: 6px 12px; cursor: pointer; }
+.chip[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+
+/* Glossaire */
+.search { width: 100%; font: 1rem var(--body); padding: 11px 14px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); color: var(--ink); }
+dl.gloss { margin: 0; display: grid; gap: 0; }
+dl.gloss div { display: grid; grid-template-columns: minmax(130px, 210px) 1fr; gap: 6px 18px; padding: 12px 0; border-bottom: 1px solid var(--line); }
+dl.gloss dt { font-weight: 700; }
+dl.gloss dd { margin: 0; color: var(--ink); min-width: 0; }
+dl.gloss dd small { display: block; color: var(--muted); margin-top: 2px; }
+@media (max-width: 560px) { dl.gloss div { grid-template-columns: 1fr; } }
+
+/* Checklist */
+.check { display: grid; gap: 8px; }
+.check label { display: flex; gap: 12px; align-items: flex-start; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px; cursor: pointer; }
+.check input { margin-top: 4px; width: 18px; height: 18px; accent-color: var(--good); flex: 0 0 auto; }
+.check label.done span { color: var(--muted); text-decoration: line-through; }
+.pitch { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 18px 20px; display: grid; gap: 10px; max-width: 72ch; }
+.pitch p { line-height: 1.65; }
+.timer { font-family: var(--display); font-size: 1.6rem; font-variant-numeric: tabular-nums; }
+footer { color: var(--muted); font-size: .85rem; margin-top: 40px; }
+/* Cours */
+.modules { display: grid; gap: 8px; }
+.mod { display: grid; grid-template-columns: 2.2em 1fr auto; gap: 4px 12px; align-items: center; text-align: left; width: 100%; font: inherit; color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; cursor: pointer; }
+.mod:disabled { cursor: default; opacity: .62; }
+.mod .n { font-family: var(--display); font-weight: 700; color: var(--accent); font-variant-numeric: tabular-nums; }
+.mod .t { font-weight: 700; min-width: 0; }
+.mod .d { grid-column: 2 / 3; color: var(--muted); font-size: .92rem; min-width: 0; }
+.mod .st { grid-row: 1 / 3; grid-column: 3; font-size: .75rem; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; padding: 3px 9px; border-radius: 999px; white-space: nowrap; }
+.st.open { background: var(--accent-soft); color: var(--accent); }
+.st.read { background: var(--good-soft); color: var(--good); }
+.st.soon { background: var(--bg); color: var(--muted); border: 1px solid var(--line); }
+.lesson { display: grid; gap: 18px; }
+.lesson-head { display: grid; gap: 6px; }
+.back { justify-self: start; font: 600 .92rem var(--body); color: var(--accent); background: none; border: 0; padding: 0; cursor: pointer; }
+.why { max-width: 68ch; }
+.term { display: grid; gap: 8px; padding: 16px 0; border-top: 1px solid var(--line); }
+.term h3 { display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: baseline; }
+.term h3 small { font-family: var(--body); font-weight: 400; color: var(--muted); font-size: .9rem; }
+.term p { max-width: 68ch; }
+.tbl { overflow-x: auto; }
+.tbl table { border-collapse: collapse; width: 100%; font-size: .93rem; background: var(--surface); }
+.tbl th, .tbl td { border-bottom: 1px solid var(--line); padding: 8px 10px; text-align: left; vertical-align: top; }
+.tbl th { color: var(--muted); font-weight: 700; }
+.ex { color: var(--muted); max-width: 68ch; }
+.ex b { color: var(--ink); }
+.schema { overflow-x: auto; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px; }
+.schema svg { display: block; min-width: 560px; width: 100%; height: auto; }
+.minq { display: grid; gap: 12px; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 18px; }
+.minq .item { display: grid; gap: 8px; }
+.minq .item p { font-weight: 600; }
+.minq .opts button { font-size: .95rem; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<div class="wrap">
+  <header>
+    <span class="tag">Préparation d'entretien</span>
+    <h1>Responsable digital chez JobIRL</h1>
+    <p class="lead">Tout ce qu'il faut savoir sur le poste, l'association et le métier, avec un quiz et les questions probables de l'entretien.</p>
+    <div class="ticket">
+      <div><b>CDI</b> <span>Levallois-Perret (92)</span></div>
+      <div><b>38–42 k€</b> <span>brut annuel</span></div>
+      <div><b>1 à 5 ans</b> <span>d'expérience</span></div>
+      <div><b>Télétravail</b> <span>2 j/sem. après 2 mois</span></div>
+      <div><b>Publiée</b> <span>le 19/10/2026 sur makesense</span></div>
+    </div>
+  </header>
+
+  <nav aria-label="Rubriques">
+    <div class="tabs" role="tablist">
+      <button role="tab" id="t-cours" aria-controls="cours" aria-selected="true">Cours</button>
+      <button role="tab" id="t-poste" aria-controls="poste" aria-selected="false">Le poste</button>
+      <button role="tab" id="t-asso" aria-controls="asso" aria-selected="false">L'association</button>
+      <button role="tab" id="t-metier" aria-controls="metier" aria-selected="false">Le métier</button>
+      <button role="tab" id="t-quiz" aria-controls="quiz" aria-selected="false">Quiz</button>
+      <button role="tab" id="t-entretien" aria-controls="entretien" aria-selected="false">Entretien</button>
+      <button role="tab" id="t-glossaire" aria-controls="glossaire" aria-selected="false">Glossaire</button>
+      <button role="tab" id="t-jourJ" aria-controls="jourJ" aria-selected="false">Jour J</button>
+    </div>
+  </nav>
+
+  <!-- COURS -->
+  <section class="view" id="cours" role="tabpanel" aria-labelledby="t-cours">
+    <div id="coursList" class="lesson">
+      <p class="intro">Un cours par sujet du poste, à suivre dans l'ordre. Chaque leçon explique les mots simplement, donne un exemple chez JobIRL et la phrase à dire en entretien, puis se termine par un petit test.</p>
+      <div class="modules" id="modules"></div>
+    </div>
+    <div id="coursLesson" class="lesson" hidden></div>
+  </section>
+
+  <!-- LE POSTE -->
+  <section class="view" id="poste" role="tabpanel" aria-labelledby="t-poste" hidden>
+    <p class="intro">Le poste mélange chef de produit, administrateur de plateforme et formateur. Tu ne codes pas : tu fais travailler des prestataires et tu rends la plateforme utile aux équipes et aux jeunes.</p>
+    <div class="topic">
+      <span class="tag">Les 7 missions de l'annonce</span>
+      <ul>
+        <li><b>Piloter jobirl.com</b> : performance, fiabilité, informations à jour.</li>
+        <li><b>Faire évoluer</b> le site et l'application mobile pour améliorer l'expérience des utilisateurs.</li>
+        <li><b>Coordonner les prestataires techniques</b> et suivre les développements.</li>
+        <li><b>Administrer</b> et entretenir la plateforme au quotidien.</li>
+        <li><b>Former et accompagner</b> les équipes dans l'utilisation de la plateforme.</li>
+        <li><b>Rédiger la documentation</b>, les procédures et les guides utilisateurs.</li>
+        <li><b>Animer la communauté</b> avec l'équipe communication : outils d'animation, réponses aux membres.</li>
+      </ul>
+    </div>
+    <div class="topic">
+      <span class="tag">Profil demandé</span>
+      <ul>
+        <li>Une bonne culture digitale et la compréhension des enjeux techniques, fonctionnels et utilisateurs.</li>
+        <li>La capacité à travailler avec des développeurs, des prestataires et des équipes métiers.</li>
+        <li>Aucun diplôme exigé. Rattaché à la directrice du digital, travail transversal avec toutes les équipes.</li>
+      </ul>
+      <p class="say"><b>Ton angle</b>Je comprends le code et je sais l'expliquer à des non-techniciens. J'ai été prestataire, donc je sais ce qu'un développeur doit recevoir pour bien livrer.</p>
+    </div>
+    <div class="topic">
+      <span class="tag">Tes preuves, mission par mission</span>
+      <ul>
+        <li><b>Documentation, guides</b> : guide d'administration de 14 chapitres pour Chant d'Orties (tuto-des-orties.varascundo.com).</li>
+        <li><b>Former les équipes</b> : un an de formation de 12 adultes en CDDI au Pôle S.</li>
+        <li><b>Suivi des développements</b> : Jira, tickets, branches et revues de code chez Qualiscope.</li>
+        <li><b>Plateforme pour plusieurs publics</b> : Médiateur, avec un parcours « apprendre » et un parcours « accompagner ».</li>
+        <li><b>Administration, évolutions</b> : DevDoc, missions freelance (La Magicieuse, ART Nat).</li>
+        <li><b>Point faible à assumer</b> : pas encore de pilotage de prestataire web. Réponse : « j'ai été de l'autre côté ».</li>
+      </ul>
+    </div>
+    <div class="topic">
+      <span class="tag">Avantages</span>
+      <ul>
+        <li>Pass Navigo et mutuelle pris en charge à 50 %, titres-restaurant de 8 € (50 % employeur).</li>
+        <li>Prime de partage de la valeur et chèque cadeau en fin d'année, selon les résultats.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- L'ASSOCIATION -->
+  <section class="view" id="asso" role="tabpanel" aria-labelledby="t-asso" hidden>
+    <p class="intro">Chiffres relevés sur jobirl.com en octobre 2026. Ils varient selon les pages du site, ce qui est en soi un sujet pour le poste.</p>
+    <div class="facts">
+      <div class="fact"><strong>2013</strong><span>lancement du réseau par Christelle Meslé-Génin</span></div>
+      <div class="fact"><strong>~50</strong><span>salariés, 4 régions</span></div>
+      <div class="fact"><strong>12–30 ans</strong><span>public du réseau</span></div>
+      <div class="fact"><strong>1 million</strong><span>de visiteurs par an (annonce)</span></div>
+      <div class="fact"><strong>345 000</strong><span>membres inscrits depuis la création</span></div>
+      <div class="fact"><strong>23 400</strong><span>jeunes dans « Connecte-toi à ton avenir » en 2024-2025</span></div>
+    </div>
+    <div class="topic">
+      <span class="tag">Statut</span>
+      <ul>
+        <li>Association loi 1901 reconnue d'intérêt général, à caractère social et éducatif.</li>
+        <li>Conventionnée par le ministère de l'Éducation nationale. Membre du Collectif Mentorat.</li>
+        <li>Siège : 12 bis rue Louis Rouquier, 92300 Levallois-Perret.</li>
+      </ul>
+    </div>
+    <div class="topic">
+      <span class="tag">Les trois activités</span>
+      <ul>
+        <li><b>Le réseau en ligne</b> : échanger avec des pros et des étudiants bénévoles, test d'orientation, fiches métiers, lives, groupes d'entraide, offres de stage (3e, 2nde, étudiant) et d'alternance. Existe aussi en application mobile.</li>
+        <li><b>Le mentorat en ligne</b> : 6 mois avec un pro, au moins un rendez-vous par mois, sur l'orientation (dont Parcoursup) ou la recherche de stage et d'alternance. Environ 2 000 jeunes accompagnés en 2024-2025.</li>
+        <li><b>Les programmes terrain</b> : « Connecte-toi à ton avenir » (de la 5e à la terminale), « Mon Alternance sur Mesure » (70 % signent un contrat d'apprentissage), « Job In Rural Life », stage de 3e, Les Intrépides de la Tech.</li>
+      </ul>
+    </div>
+    <div class="topic">
+      <span class="tag">Qui tu côtoierais</span>
+      <ul>
+        <li><b>Sabrina Deal</b>, directrice digital et mentorat : très probablement ta responsable.</li>
+        <li><b>Nicolas Dars</b>, chef de projets digital : le profil le plus proche du tien.</li>
+        <li><b>Communication et marketing digital</b> : Morgane Schild (responsable) et deux chargées de communication.</li>
+        <li><b>Mentorat</b> : une responsable nationale et six chargés de programme, gros utilisateurs de la plateforme.</li>
+      </ul>
+      <p class="say"><b>À retenir</b>Les équipes sont surtout terrain et social. Tu serais probablement le référent technique face aux prestataires.</p>
+    </div>
+    <div class="topic">
+      <span class="tag">Ce que tu as remarqué sur le site (à dire avec tact)</span>
+      <ul>
+        <li>Nombre de membres différent selon les pages : 185 000, 345 000, 110 000.</li>
+        <li>Pages « Qui sommes-nous » et mentions légales en <i>noindex</i> : à vérifier si c'est voulu.</li>
+        <li>Mêmes articles sous plusieurs adresses (<code>/conseils-infos</code>, <code>/conseils-et-infos</code>, <code>/pro/…</code>).</li>
+        <li>Deux menus et deux plans du site à maintenir (jeunes et pros).</li>
+      </ul>
+      <p class="say"><b>Formulation</b>« J'ai parcouru la plateforme. Vu la diversité des publics et des contenus, je vois l'importance d'une source unique pour les chiffres et d'un suivi rigoureux des retours utilisateurs. »</p>
+    </div>
+  </section>
+
+  <!-- LE MÉTIER -->
+  <section class="view" id="metier" role="tabpanel" aria-labelledby="t-metier" hidden>
+    <p class="intro">Les notions qu'un responsable digital manipule chaque semaine. Pour chacune : ce que c'est, et ce que tu en dirais en entretien.</p>
+    <div class="topic">
+      <span class="tag">1 · Recueillir et formaliser un besoin</span>
+      <ul>
+        <li>Partir du problème de l'utilisateur, pas de la solution demandée.</li>
+        <li>Écrire une <b>user story</b> : « En tant que chargé de mentorat, je veux… afin de… ».</li>
+        <li>Ajouter des <b>critères d'acceptation</b> testables : « quand je fais X, je vois Y ».</li>
+        <li>Joindre le contexte : captures, navigateur, nombre d'utilisateurs touchés.</li>
+      </ul>
+      <p class="say"><b>Phrase utile</b>« Une bonne demande, c'est un contexte, un objectif, un exemple et une priorité. Je le sais parce que j'ai reçu des demandes floues quand j'étais prestataire. »</p>
+    </div>
+    <div class="topic">
+      <span class="tag">2 · Prioriser</span>
+      <ul>
+        <li><b>Impact / effort</b> : on traite d'abord ce qui aide beaucoup de monde pour peu d'effort.</li>
+        <li><b>MoSCoW</b> : Must, Should, Could, Won't (cette fois-ci).</li>
+        <li><b>RICE</b> : Reach × Impact × Confidence ÷ Effort, pour comparer des évolutions.</li>
+        <li>Toujours en premier : sécurité, données personnelles, panne bloquante.</li>
+      </ul>
+      <p class="say"><b>Phrase utile</b>« Je rends la priorisation visible : une liste partagée, des critères connus de tous, et un arbitrage final avec la directrice du digital. »</p>
+    </div>
+    <div class="topic">
+      <span class="tag">3 · Piloter un prestataire</span>
+      <ul>
+        <li><b>Cadrage</b> : cahier des charges ou tickets, périmètre, délais, budget.</li>
+        <li><b>Devis</b> : comparer le chiffrage à la complexité réelle, demander le détail des écarts.</li>
+        <li><b>Suivi</b> : point régulier, tableau des tickets, un seul interlocuteur de chaque côté.</li>
+        <li><b>Recette</b> : tester sur un environnement de préproduction avant toute mise en ligne, puis valider ou refuser par écrit.</li>
+        <li><b>Maintenance</b> : contrat de TMA, délais d'intervention (SLA), garantie après livraison.</li>
+      </ul>
+      <p class="say"><b>Phrase utile</b>« Je ne refais pas le travail du prestataire. Je décris l'écart entre l'attendu et le livré, avec les étapes pour le reproduire. »</p>
+    </div>
+    <div class="topic">
+      <span class="tag">4 · Suivre la performance et la fiabilité</span>
+      <ul>
+        <li><b>Disponibilité</b> : une sonde qui teste le site toutes les minutes et alerte en cas de panne.</li>
+        <li><b>Vitesse</b> : les Core Web Vitals de Google. Bons seuils : LCP sous 2,5 s, INP sous 200 ms, CLS sous 0,1.</li>
+        <li><b>Erreurs</b> : journaux du serveur, erreurs JavaScript, formulaires qui échouent.</li>
+        <li><b>Usage</b> : inscriptions de jeunes et de pros, messages envoyés, taux de réponse des pros, binômes de mentorat actifs.</li>
+      </ul>
+      <p class="say"><b>Phrase utile</b>« Pour JobIRL, l'indicateur clé n'est pas le trafic mais la mise en relation : combien de jeunes reçoivent une réponse d'un pro. »</p>
+    </div>
+    <div class="topic">
+      <span class="tag">5 · Référencement (SEO et GEO)</span>
+      <ul>
+        <li><b>Google Search Console</b> : voir quelles pages sont indexées, les erreurs, les requêtes.</li>
+        <li><b>noindex</b> : empêche une page d'apparaître dans Google. Utile pour des pages privées, nuisible sur une page de présentation.</li>
+        <li><b>Doublons</b> : une redirection 301 ou une balise canonical indique la bonne adresse.</li>
+        <li><b>GEO</b> : rendre le contenu clair et sourcé pour qu'il soit repris par les moteurs à base d'IA.</li>
+      </ul>
+    </div>
+    <div class="topic">
+      <span class="tag">6 · Données personnelles et mineurs</span>
+      <ul>
+        <li>Le public commence à 12 ans : le RGPD s'applique avec une vigilance particulière.</li>
+        <li>En France, un mineur peut consentir seul au traitement de ses données par un service en ligne à partir de 15 ans ; avant, l'accord d'un parent est requis.</li>
+        <li>Collecter le minimum, informer clairement, gérer les cookies et les traceurs (YouTube, LinkedIn, Google Tag Manager sont présents sur le site).</li>
+        <li>Modérer les échanges entre jeunes et adultes : signalement, chartes, réaction rapide.</li>
+      </ul>
+    </div>
+    <div class="topic">
+      <span class="tag">7 · Former et documenter</span>
+      <ul>
+        <li>Un guide par usage, pas par écran : « publier une offre », « accompagner un binôme ».</li>
+        <li>Captures, étapes numérotées, erreurs fréquentes et quoi faire.</li>
+        <li>Une FAQ interne alimentée par les questions réelles reçues.</li>
+        <li>Former en petit groupe avec un cas concret, puis laisser le guide en relais.</li>
+      </ul>
+      <p class="say"><b>Phrase utile</b>« Chaque question qu'on me pose deux fois devient une page du guide. »</p>
+    </div>
+    <div class="topic">
+      <span class="tag">8 · Animer la communauté</span>
+      <ul>
+        <li>Recruter et garder les pros bénévoles : relances, remerciements, mise en avant.</li>
+        <li>Aider les jeunes à oser écrire : les modèles de message existent déjà sur le site.</li>
+        <li>Faire vivre les groupes et les lives avec l'équipe communication.</li>
+        <li>Mesurer : messages sans réponse, délai de réponse, pros inactifs.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- QUIZ -->
+  <section class="view" id="quiz" role="tabpanel" aria-labelledby="t-quiz" hidden>
+    <p class="intro">Douze questions tirées dans un ordre aléatoire. L'explication s'affiche après chaque réponse.</p>
+    <div class="qcard" id="qcard" aria-live="polite"></div>
+  </section>
+
+  <!-- ENTRETIEN -->
+  <section class="view" id="entretien" role="tabpanel" aria-labelledby="t-entretien" hidden>
+    <p class="intro">Les questions probables, avec une trame de réponse fondée sur ton parcours. Entraîne-toi à voix haute, puis ouvre la trame pour comparer.</p>
+    <div class="filters" id="filters">
+      <button class="chip" aria-pressed="true" data-k="all">Toutes</button>
+      <button class="chip" aria-pressed="false" data-k="Parcours">Parcours</button>
+      <button class="chip" aria-pressed="false" data-k="Mise en situation">Mises en situation</button>
+      <button class="chip" aria-pressed="false" data-k="Motivation">Motivation</button>
+      <button class="chip" aria-pressed="false" data-k="À poser">À poser</button>
+    </div>
+    <div id="qlist" style="display:grid; gap:10px"></div>
+  </section>
+
+  <!-- GLOSSAIRE -->
+  <section class="view" id="glossaire" role="tabpanel" aria-labelledby="t-glossaire" hidden>
+    <label for="gsearch" class="intro">Cherche un terme ou une définition.</label>
+    <input id="gsearch" class="search" type="search" placeholder="Ex. recette, canonical, SLA…" autocomplete="off">
+    <dl class="gloss" id="gloss"></dl>
+  </section>
+
+  <!-- JOUR J -->
+  <section class="view" id="jourJ" role="tabpanel" aria-labelledby="t-jourJ" hidden>
+    <div class="topic">
+      <span class="tag">Ta présentation en une minute</span>
+      <div class="pitch">
+        <p>Je suis développeur web et formateur. Pendant un an, au Pôle S à Pantin, j'ai formé douze adultes en insertion, et j'ai créé pour eux une plateforme de cours, DevDoc.</p>
+        <p>En parallèle, je réalise des sites pour des structures qui ne sont pas techniques. Pour une maison d'édition, j'ai conçu l'espace d'administration et rédigé un guide de quatorze chapitres pour que l'équipe soit autonome.</p>
+        <p>Ce qui me plaît, c'est le lien entre les besoins des gens et la technique. Chez JobIRL, je voudrais mettre ça au service d'une plateforme utile aux jeunes : comprendre ce que demandent les équipes, le traduire pour les prestataires, vérifier que ça marche et former tout le monde.</p>
+        <div class="row">
+          <span class="timer" id="timer">1:00</span>
+          <button class="btn" id="tstart">Lancer le chrono</button>
+          <button class="btn ghost" id="treset">Remettre à zéro</button>
+        </div>
+      </div>
+    </div>
+    <div class="topic">
+      <span class="tag">Liste de préparation</span>
+      <p class="intro" id="progress"></p>
+      <div class="check" id="check"></div>
+    </div>
+  </section>
+
+  <footer>Sources : annonce « Responsable digital » sur jobs.makesense.org et pages publiques de jobirl.com, consultées en octobre 2026. Ta progression reste dans ce navigateur.</footer>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var store = {
+    get: function (k, d) { try { var v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); } catch (e) { return d; } },
+    set: function (k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+  };
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+
+  /* ---------- Onglets ---------- */
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('[role="tab"]'));
+  function show(id) {
+    tabs.forEach(function (t) {
+      var on = t.getAttribute("aria-controls") === id;
+      t.setAttribute("aria-selected", on ? "true" : "false");
+      document.getElementById(t.getAttribute("aria-controls")).hidden = !on;
+    });
+    store.set("jobirl-tab", id);
+  }
+  tabs.forEach(function (t) { t.addEventListener("click", function () { show(t.getAttribute("aria-controls")); }); });
+  var start = (location.hash || "").replace("#", "");
+  if (!document.getElementById(start) || !document.querySelector('[aria-controls="' + start + '"]')) start = store.get("jobirl-tab", "cours");
+  if (document.getElementById(start)) show(start);
+
+  /* ---------- Cours ---------- */
+  var MODULES = [
+    { id: "vocab", t: "Le vocabulaire technique de base", d: "Front, back, serveur, API, environnements, déploiement : les mots que les développeurs emploient." },
+    { id: "bugs", t: "Repérer, reproduire et signaler un bug", d: "Distinguer bug, erreur d'usage et évolution, écrire un rapport de bug utile." },
+    { id: "devs", t: "Communiquer avec les développeurs", d: "Ticket, user story, critères d'acceptation, réunions, ce qu'il faut éviter." },
+    { id: "devis", t: "Lire un devis et choisir un prestataire", d: "Jours-homme, forfait ou régie, lots, exclusions, comparer et négocier." },
+    { id: "contrat", t: "Contrat, maintenance et garanties", d: "TMA, SLA, garantie, propriété du code, réversibilité." },
+    { id: "projet", t: "Mener un projet de bout en bout", d: "Cadrage, backlog, sprint, planning, priorisation, suivi." },
+    { id: "recette", t: "Recette et mise en production", d: "Cahier de recette, tests, validation, mise en ligne, retour arrière." },
+    { id: "mobile", t: "L'application mobile", d: "Stores, versions, validation Apple et Google, mises à jour, notifications." },
+    { id: "perf", t: "Performance, sécurité et hébergement", d: "Vitesse, disponibilité, sauvegardes, mises à jour de sécurité." },
+    { id: "rgpd", t: "Données personnelles et mineurs", d: "RGPD, consentement, cookies, modération." },
+    { id: "mesure", t: "Mesurer et piloter avec des chiffres", d: "Analytics, KPI, tableaux de bord, tests A/B." },
+    { id: "seo", t: "Référencement naturel", d: "Indexation, Search Console, redirections, contenus." },
+    { id: "former", t: "Former, documenter, animer", d: "Guides, procédures, formation des équipes, communauté." }
+  ];
+
+  var LESSONS = {
+    vocab: {
+      why: "Les développeurs utilisent ces mots en permanence. Tu n'as pas besoin de savoir tout faire, mais tu dois comprendre ce qu'ils disent et savoir poser la bonne question. En entretien, employer le bon mot au bon moment montre que tu peux être l'interlocuteur des prestataires.",
+      schema: true,
+      terms: [
+        { w: "Front-end", s: "la partie visible", p: "Tout ce qui s'affiche dans le navigateur ou l'application : pages, boutons, formulaires, mise en page. Écrit en HTML, CSS et JavaScript, souvent avec un framework comme React ou Vue.", ex: "Chez JobIRL : le formulaire d'inscription d'un jeune, le bouton « Envoyer un message » à un pro.", say: "« Le bouton ne s'affiche pas sur mobile : c'est un problème front. »" },
+        { w: "Back-end", s: "la partie cachée", p: "Le programme qui tourne sur le serveur : il reçoit les demandes, applique les règles (qui a le droit de faire quoi), lit et écrit dans la base de données, envoie les e-mails.", ex: "Chez JobIRL : vérifier qu'un compte pro est validé avant qu'il puisse publier une offre de stage.", say: "« Le message part bien mais n'arrive jamais : je pense que c'est côté back. »" },
+        { w: "Base de données", s: "là où tout est rangé", p: "Le grand classeur organisé où sont stockés les comptes, les messages, les offres, les fiches métiers. On en parle souvent avec son nom : MySQL, PostgreSQL.", ex: "Une fiche métier mal orthographiée se corrige dans le back-office, qui modifie la base de données.", say: "« Avant la mise à jour, on a bien une sauvegarde de la base ? »" },
+        { w: "Serveur et hébergement", s: "l'ordinateur qui fait tourner le site", p: "Le serveur est un ordinateur allumé en permanence qui fait tourner le back-end. L'hébergeur est l'entreprise qui le loue et le maintient. Le site de JobIRL est hébergé par Easy Service Informatique, d'après ses mentions légales.", ex: "Une panne totale du site un lundi matin vient souvent du serveur ou de l'hébergeur.", say: "« Qui alerte qui en cas de panne : le prestataire ou l'hébergeur ? »" },
+        { w: "Nom de domaine et DNS", s: "l'adresse du site", p: "Le nom de domaine, c'est jobirl.com. Le DNS est l'annuaire qui indique sur quel serveur se trouve ce nom. Une erreur dans le DNS rend le site introuvable alors que le serveur fonctionne.", ex: "Tu l'as fait toi-même : la bascule du domaine la-magicieuse.org vers le nouveau site.", say: "« Le domaine doit être au nom de l'association, pas du prestataire. »" },
+        { w: "HTTPS et certificat", s: "le cadenas", p: "Le certificat chiffre les échanges entre l'utilisateur et le site. Il a une date d'expiration : s'il n'est pas renouvelé, les navigateurs affichent une alerte de sécurité.", ex: "Un certificat expiré fait fuir les jeunes avant même qu'ils s'inscrivent.", say: "« Le renouvellement du certificat est-il automatique ? »" },
+        { w: "API", s: "le guichet entre deux logiciels", p: "Un point d'accès qui permet à un logiciel de demander des données à un autre. L'application mobile parle au serveur par une API ; le site peut aussi récupérer des données d'un service extérieur.", ex: "JobIRL utilise les données publiques de l'Onisep (formations, établissements, métiers) : ce type de données arrive généralement par un fichier ou une API.", say: "« Si on modifie l'API, est-ce que l'application mobile reste compatible ? »" },
+        { w: "CMS et back-office", s: "l'espace d'administration", p: "Le CMS est l'outil qui permet de modifier les contenus sans coder (WordPress en est un). Le back-office est l'espace réservé aux équipes pour gérer comptes, contenus et modération.", ex: "Une chargée de mentorat qui associe un mentor à un jeune travaille dans le back-office.", say: "« Les équipes doivent pouvoir faire ça seules dans le back-office, sans passer par le prestataire. »" },
+        { w: "Environnements", s: "local, recette, production", p: "Le local, c'est l'ordinateur du développeur. La recette (ou préproduction, « préprod ») est une copie du site pour tester. La production (« prod ») est le vrai site utilisé par les jeunes. On ne teste jamais directement en production.", ex: "Il existe une adresse preprod.jobirl.com : c'est l'environnement de test.", say: "« Je valide en préprod, puis on planifie la mise en prod. »" },
+        { w: "Déploiement", s: "la mise en ligne", p: "L'action de publier une nouvelle version du site ou de l'application sur un environnement. On parle de « déployer en prod ». Un bon déploiement prévoit un retour arrière (« rollback ») si ça se passe mal.", ex: "Éviter de déployer un vendredi soir ou la veille d'un événement Parcoursup.", say: "« Si le déploiement casse quelque chose, combien de temps pour revenir à la version d'avant ? »" },
+        { w: "Version, Git, branche", s: "l'historique du code", p: "Git garde toutes les versions du code. Une branche est une copie de travail pour une évolution précise ; une fois validée, on la « merge » (fusionne) dans la version principale. Une « release » est une version livrée.", ex: "Chez Qualiscope, tu travaillais déjà avec des branches et des revues de code.", say: "« Le code est-il sur un dépôt Git auquel l'association a accès ? »" },
+        { w: "Cache", s: "la mémoire rapide", p: "Une copie temporaire d'une page ou d'une donnée, gardée pour aller plus vite. Effet de bord classique : tu modifies un texte et tu vois encore l'ancien.", ex: "Après une correction, demander de « vider le cache » avant de conclure que ça ne marche pas.", say: "« Je ne vois pas la correction : c'est peut-être le cache, je teste en navigation privée. »" },
+        { w: "Responsive", s: "adapté à tous les écrans", p: "Un site responsive s'adapte à l'ordinateur, la tablette et le téléphone. Le public de JobIRL est jeune et très souvent sur téléphone.", ex: "Toujours recetter une évolution sur un vrai téléphone, pas seulement sur l'ordinateur.", say: "« Sur quelles tailles d'écran et quels navigateurs la recette est-elle prévue ? »" },
+        { w: "Application native, web ou hybride", s: "trois façons de faire une appli", p: "Native : écrite spécialement pour iPhone ou Android. Hybride : un seul code pour les deux (par exemple Flutter ou React Native). Web : le site lui-même, utilisé depuis le téléphone. JobIRL a une application sur l'App Store et sur Google Play.", ex: "Une évolution doit souvent être faite deux fois : sur le site et dans l'application.", say: "« Cette évolution concerne-t-elle aussi l'application, ou seulement le site ? »" },
+        { w: "Authentification et rôles", s: "qui est qui", p: "L'authentification vérifie qui se connecte (identifiant et mot de passe). Les rôles définissent ce que chacun peut faire : jeune, pro, mentor, administrateur.", ex: "Un jeune ne doit jamais voir le tableau de bord d'un chargé de mentorat.", say: "« Quels rôles existent aujourd'hui, et qui peut les modifier ? »" },
+        { w: "Logs", s: "le journal de bord", p: "Les fichiers où le serveur note ce qu'il fait et les erreurs rencontrées, avec l'heure. C'est le premier endroit où un développeur cherche la cause d'un bug.", ex: "Donner l'heure précise d'un problème aide le prestataire à le retrouver dans les logs.", say: "« Le bug est arrivé à 10 h 42 avec tel compte : vous pouvez regarder les logs ? »" },
+        { w: "Bug et régression", s: "ce qui ne marche pas", p: "Un bug est un comportement différent de ce qui était prévu. Une régression est un bug sur quelque chose qui marchait avant une mise à jour : c'est le plus grave, car on a cassé l'existant.", ex: "Après une mise à jour, les pros ne reçoivent plus les e-mails de notification : régression.", say: "« C'est une régression depuis la mise en prod de mardi, donc à corriger en priorité. »" },
+        { w: "Ticket", s: "une demande suivie", p: "Une fiche dans un outil (Jira, Trello, GitLab) qui décrit un bug ou une évolution, avec un statut : à faire, en cours, à tester, terminé. Rien d'important ne se demande seulement à l'oral.", ex: "Une demande passée dans un couloir se perd ; un ticket se suit.", say: "« Je crée le ticket avec les captures et je vous le partage. »" }
+      ],
+      quiz: [
+        { q: "Une chargée de mentorat dit : « je n'arrive pas à associer un mentor à un jeune ». Où se passe l'action ?", o: ["Dans le front public du site", "Dans le back-office", "Dans le DNS"], a: 1, e: "Les équipes travaillent dans le back-office, l'espace d'administration réservé." },
+        { q: "Tu veux tester une nouvelle fonctionnalité livrée. Sur quel environnement ?", o: ["La production", "La préproduction (recette)", "L'ordinateur du développeur"], a: 1, e: "On teste en préproduction. La production, c'est le vrai site utilisé par les jeunes." },
+        { q: "Depuis la mise à jour de mardi, les pros ne reçoivent plus d'e-mails. C'est…", o: ["Une évolution", "Une erreur d'usage", "Une régression"], a: 2, e: "Ça marchait avant la mise à jour : c'est une régression, à traiter en priorité." },
+        { q: "Tu as corrigé un texte mais tu vois toujours l'ancien. Ta première hypothèse ?", o: ["Le cache", "Le DNS", "La base de données est effacée"], a: 0, e: "Teste en navigation privée ou demande de vider le cache avant de conclure à un bug." },
+        { q: "Pourquoi le nom de domaine doit-il être au nom de l'association ?", o: ["Pour payer moins cher", "Pour ne pas dépendre du prestataire si on en change", "Parce que c'est obligatoire pour le HTTPS"], a: 1, e: "Si le prestataire détient le domaine, changer de prestataire devient compliqué. C'est une question de réversibilité." }
+      ]
+    },
+    bugs: {
+      why: "Chez JobIRL, les signalements arriveront de partout : jeunes, pros, mentors, équipes terrain. Ton rôle est de faire le tri, de reproduire le problème et de le transmettre au prestataire sous une forme qu'il peut corriger du premier coup. Un rapport de bug flou coûte des jours d'allers-retours ; un bon rapport se corrige dans l'heure.",
+      terms: [
+        { w: "Trier avant tout", s: "bug, erreur d'usage, évolution ou contenu", p: "Quatre cas très différents. Un bug : le site ne fait pas ce qui était prévu. Une erreur d'usage : l'utilisateur ne sait pas comment faire, le site fonctionne. Une évolution : on voudrait que le site fasse quelque chose de nouveau. Un problème de contenu : un texte, une fiche ou une offre est fausse, tu peux souvent la corriger toi-même dans le back-office.", ex: "« Je ne trouve pas où ajouter ma photo » : erreur d'usage, donc réponse et peut-être une ligne dans la FAQ. « La photo ne s'enregistre pas » : bug.", say: "« Avant de transmettre, je qualifie : bug, usage, évolution ou contenu. Seuls les bugs et les évolutions vont au prestataire. »" },
+        { w: "Reproduire", s: "refaire le problème soi-même", p: "Un bug qu'on ne sait pas reproduire est presque impossible à corriger. Tu refais exactement le parcours de l'utilisateur, avec un compte du même type (jeune, pro, mentor), jusqu'à voir le problème. Tu notes chaque clic.", ex: "Un pro dit que le formulaire d'offre bloque : tu crées une offre avec un compte pro de test et tu notes à quelle étape ça casse.", say: "« J'ai reproduit le bug trois fois sur un compte pro de test, voici les étapes. »" },
+        { w: "Isoler", s: "savoir où ça casse", p: "Tu changes une seule chose à la fois pour savoir d'où vient le problème : un autre navigateur, la navigation privée (sans cache ni extensions), un autre compte, le téléphone au lieu de l'ordinateur, le site au lieu de l'application.", ex: "Le bug n'existe que sur iPhone dans l'application : c'est une information précieuse pour le développeur.", say: "« Ça marche sur Chrome mais pas sur Safari, et uniquement dans l'appli. »" },
+        { w: "Le contexte", s: "ce que le développeur te demandera toujours", p: "L'adresse de la page (URL), le navigateur et sa version, l'appareil et son système (Android, iOS, Windows), le type de compte, la date et l'heure précises. L'heure permet de retrouver l'erreur dans les logs du serveur.", ex: "« Mardi 14 h 05, compte mentor, Chrome 130 sur Windows, page /e-mentorat ».", say: "« Je joins toujours l'URL, l'appareil, le compte et l'heure. »" },
+        { w: "Captures et vidéo", s: "montrer plutôt qu'expliquer", p: "Une capture d'écran avec la zone du problème entourée, ou une courte vidéo de l'écran qui montre le parcours. La vidéo est idéale quand le bug dépend d'un enchaînement de clics.", ex: "Sur téléphone, l'enregistrement d'écran est intégré à iOS et Android.", say: "« Je vous envoie une vidéo de 20 secondes, on voit le bouton disparaître. »" },
+        { w: "La console du navigateur", s: "la touche F12", p: "Dans Chrome ou Firefox, F12 ouvre les outils de développement. L'onglet Console affiche les erreurs JavaScript en rouge. Une capture de ces lignes rouges fait gagner beaucoup de temps au développeur. Tu n'as pas à les comprendre, seulement à les transmettre.", ex: "Le bouton « Envoyer un message » ne réagit pas : une erreur rouge dans la console indique souvent un problème front.", say: "« J'ai ouvert la console : il y a une erreur au clic, je vous mets la capture. »" },
+        { w: "L'onglet Réseau et les codes HTTP", s: "ce que répond le serveur", p: "L'onglet Réseau (Network) des outils de développement montre chaque échange avec le serveur et son code. 200 : tout va bien. 301 ou 302 : redirection. 403 : accès interdit (souvent un problème de rôle). 404 : page ou ressource introuvable. 500 : erreur côté serveur. 502 ou 503 : serveur indisponible ou surchargé.", ex: "Un formulaire qui renvoie une erreur 500 : c'est un bug back-end, pas un souci de l'utilisateur.", say: "« La sauvegarde renvoie une erreur 500 : c'est côté serveur. »" },
+        { w: "Attendu et obtenu", s: "le cœur du rapport", p: "Écris ce qui devrait se passer, puis ce qui se passe réellement. C'est ce qui distingue un bug d'un malentendu, et ce qui permet de vérifier la correction ensuite.", ex: "Attendu : le pro reçoit un e-mail quand un jeune lui écrit. Obtenu : aucun e-mail, le message est visible sur le site.", say: "« Attendu, obtenu, étapes : avec ça, le développeur n'a pas besoin de me rappeler. »" },
+        { w: "Gravité et priorité", s: "deux notions différentes", p: "La gravité mesure l'impact technique : bloquant (on ne peut plus rien faire), majeur (une fonction importante est cassée), mineur (gênant mais contournable), cosmétique (affichage). La priorité dit quand corriger, selon le contexte : un bug mineur sur les inscriptions la veille d'un forum devient prioritaire.", ex: "Les jeunes ne peuvent plus s'inscrire : bloquant et priorité maximale. Une faute dans le pied de page : cosmétique.", say: "« C'est majeur, et prioritaire parce que le forum des métiers est jeudi. »" },
+        { w: "Régression et non-régression", s: "ne pas casser l'existant", p: "Une régression, c'est quelque chose qui marchait avant une mise à jour. Les tests de non-régression vérifient, après chaque livraison, que les parcours essentiels marchent toujours : inscription, connexion, envoi de message, dépôt d'offre.", ex: "Une petite liste de 10 parcours à tester après chaque mise en production.", say: "« Après chaque mise en prod, je repasse la liste des parcours essentiels. »" },
+        { w: "Contournement", s: "une solution provisoire", p: "En attendant la correction, une manière de permettre à l'utilisateur de faire ce qu'il voulait : tu publies l'offre à sa place, tu proposes un autre navigateur, tu fais l'action dans le back-office.", ex: "Le formulaire d'offre bloque pour un pro : tu publies son offre toi-même et tu le préviens.", say: "« Le bug est transmis, et j'ai trouvé un contournement pour ne pas perdre le pro. »" },
+        { w: "Suivre jusqu'au bout", s: "un bug n'est fermé que quand c'est vérifié", p: "Le prestataire indique « corrigé ». Tu retestes toi-même en préproduction puis en production, avec les étapes du rapport. Ensuite seulement tu fermes le ticket et tu préviens la personne qui avait signalé le problème.", ex: "Répondre au jeune « c'est réparé, merci de nous l'avoir signalé » donne envie de signaler la prochaine fois.", say: "« Je ferme le ticket après avoir retesté, et je remercie la personne qui a signalé. »" },
+        { w: "Capitaliser", s: "ne pas résoudre deux fois le même problème", p: "Un problème qui revient (mot de passe oublié, e-mail dans les indésirables, photo trop lourde) mérite une page de FAQ, une procédure pour les équipes ou une évolution du site.", ex: "Si cinq jeunes par semaine ne reçoivent pas l'e-mail de confirmation, on vérifie la configuration d'envoi des e-mails et on ajoute un message « pensez à vérifier vos spams ».", say: "« Chaque problème qui revient devient une page de FAQ ou une évolution. »" }
+      ],
+      extra: '<div class="topic"><span class="tag">Modèle de rapport de bug à recopier</span><div class="pitch">'
+        + '<p><b>Titre :</b> [Appli iOS] Le bouton « Envoyer » ne fait rien sur la fiche d\'un pro</p>'
+        + '<p><b>Gravité :</b> majeur · <b>Priorité :</b> haute (empêche les jeunes de contacter les pros)</p>'
+        + '<p><b>Environnement :</b> production · application iOS · iPhone 13, iOS 18 · compte jeune de test · mardi 14 h 05</p>'
+        + '<p><b>Étapes pour reproduire :</b><br>1. Se connecter avec un compte jeune.<br>2. Rechercher un pro, ouvrir sa fiche.<br>3. Écrire un message et appuyer sur « Envoyer ».</p>'
+        + '<p><b>Résultat attendu :</b> le message part et s\'affiche dans la conversation.</p>'
+        + '<p><b>Résultat obtenu :</b> rien ne se passe, le texte reste dans le champ.</p>'
+        + '<p><b>Isolement :</b> fonctionne sur le site (Chrome, Safari). Problème uniquement dans l\'application iOS. Android non testé.</p>'
+        + '<p><b>Pièces jointes :</b> vidéo de l\'écran (20 s).</p>'
+        + '<p><b>Contournement :</b> passer par le site en attendant.</p>'
+        + '</div></div>',
+      quiz: [
+        { q: "Un jeune écrit : « je ne trouve pas comment modifier mon profil ». C'est…", o: ["Un bug bloquant", "Une erreur d'usage", "Une régression"], a: 1, e: "Le site fonctionne, la personne ne trouve pas comment faire : on lui répond, et si la question revient, on améliore la FAQ ou l'interface." },
+        { q: "Que mettre en premier dans un rapport de bug pour qu'il soit utilisable ?", o: ["Le nom de la personne qui a signalé", "Les étapes pour reproduire, l'attendu et l'obtenu", "Une proposition de correction dans le code"], a: 1, e: "Sans étapes ni comparaison attendu / obtenu, le développeur ne peut ni reproduire ni vérifier." },
+        { q: "Le serveur renvoie une erreur 403. Qu'est-ce que ça suggère ?", o: ["La page n'existe pas", "Un problème de droits ou de rôle", "Le serveur est surchargé"], a: 1, e: "403 signifie accès interdit. 404 : introuvable. 500 : erreur serveur. 503 : indisponible." },
+        { q: "Une faute d'orthographe dans le pied de page : gravité ?", o: ["Bloquant", "Majeur", "Cosmétique"], a: 2, e: "Elle ne gêne aucun usage. Elle se corrige, mais sans urgence." },
+        { q: "Le prestataire dit « c'est corrigé ». Que fais-tu ?", o: ["Je ferme le ticket", "Je reteste avec les étapes du rapport, puis je ferme et je préviens la personne", "Je demande une facture"], a: 1, e: "Un bug n'est fermé qu'après vérification. Prévenir la personne qui l'a signalé encourage les signalements." }
+      ]
+    },
+    devs: {
+      "why": "Le poste te place entre deux mondes : les équipes de JobIRL, qui parlent de jeunes, de mentors et de forums, et les développeurs, qui parlent de pages, de données et de délais. Ton travail est de traduire dans les deux sens, par écrit, sans ambiguïté. Une demande bien formulée évite les mauvaises surprises à la livraison et les factures supplémentaires.",
+      "terms": [
+        {
+          "w": "Décrire le besoin, pas la solution",
+          "s": "le quoi et le pourquoi, pas le comment",
+          "p": "Tu expliques le problème et le résultat attendu. Le développeur propose la manière de le faire : il connaît le code et trouvera souvent plus simple ou moins cher.",
+          "ex": "À éviter : « ajoutez une popup rouge ». À préférer : « les jeunes ne voient pas qu'un pro leur a répondu ; il faut qu'ils le remarquent dès la connexion ».",
+          "say": "« Je décris le problème et le résultat attendu, et je laisse le prestataire proposer la solution. »"
+        },
+        {
+          "w": "User story",
+          "s": "le besoin vu par l'utilisateur",
+          "p": "Une phrase courte : « En tant que [type d'utilisateur], je veux [action] afin de [bénéfice] ». Elle rappelle pour qui et pourquoi on fait l'évolution, ce qui aide à arbitrer les détails.",
+          "ex": "« En tant que pro bénévole, je veux recevoir un rappel quand un jeune m'a écrit afin de ne pas le laisser sans réponse. »",
+          "say": "« Chaque évolution part d'une user story, pour garder en tête l'utilisateur. »"
+        },
+        {
+          "w": "Critères d'acceptation",
+          "s": "comment on saura que c'est fini",
+          "p": "Une liste de conditions vérifiables, souvent écrites sous la forme « Étant donné… Quand… Alors… ». Ils servent de contrat : le développeur sait quoi livrer, et toi tu sais quoi tester à la recette.",
+          "ex": "Étant donné un message non lu depuis 7 jours, quand la tâche quotidienne passe, alors le pro reçoit un e-mail de rappel, une seule fois.",
+          "say": "« Je rédige des critères d'acceptation testables : c'est eux que je vérifie à la recette. »"
+        },
+        {
+          "w": "Définition de « terminé »",
+          "s": "ce que « fini » veut dire pour tout le monde",
+          "p": "Une règle commune : une évolution n'est terminée que si elle est développée, testée en préproduction, validée par toi, documentée pour les équipes et compatible site et application. Sans cette règle, « c'est fait » peut vouloir dire « c'est codé mais pas testé ».",
+          "ex": "Une évolution livrée sur le site mais oubliée dans l'appli n'est pas terminée.",
+          "say": "« On se met d'accord dès le départ sur ce que veut dire terminé. »"
+        },
+        {
+          "w": "Le bon ticket",
+          "s": "tout ce qu'il faut, rien de trop",
+          "p": "Un titre clair, le contexte (qui est gêné, combien de personnes), la user story, les critères d'acceptation, la priorité, une maquette ou une capture si utile, et une échéance si elle est réelle. Une seule demande par ticket.",
+          "ex": "Trois demandes dans un même ticket finissent avec une faite, une oubliée et une mal comprise.",
+          "say": "« Un ticket, une demande, avec contexte, critères et priorité. »"
+        },
+        {
+          "w": "Le bon canal",
+          "s": "écrit pour décider, oral pour clarifier",
+          "p": "Toute demande ou décision passe par un ticket ou un e-mail récapitulatif : il reste une trace. La messagerie instantanée sert aux questions rapides. La réunion sert à décider ou à débloquer, et se termine par un compte rendu.",
+          "ex": "Une décision prise au téléphone est confirmée le jour même par écrit.",
+          "say": "« Ce qu'on décide à l'oral, je le confirme par écrit. »"
+        },
+        {
+          "w": "Un seul point d'entrée",
+          "s": "tu centralises",
+          "p": "Si chaque équipe écrit directement au prestataire, les demandes se contredisent et la facture gonfle. Les demandes passent par toi : tu les regroupes, tu priorises avec la directrice du digital, tu transmets.",
+          "ex": "L'équipe mentorat et l'équipe communication demandent deux changements contraires sur la même page : tu arbitres avant de transmettre.",
+          "say": "« Je suis le point d'entrée unique vers les prestataires, pour garder une seule liste de priorités. »"
+        },
+        {
+          "w": "Les rendez-vous réguliers",
+          "s": "point, démo, compte rendu",
+          "p": "Un point régulier (par exemple chaque semaine, 30 minutes) pour suivre les tickets en cours et les blocages. Une démonstration à chaque livraison pour voir le résultat avant la mise en ligne. Un compte rendu court : décisions, actions, qui, pour quand.",
+          "ex": "Le compte rendu tient en cinq lignes et part le jour même.",
+          "say": "« Chaque réunion se termine par des décisions et des actions datées. »"
+        },
+        {
+          "w": "L'estimation",
+          "s": "combien de temps, combien d'argent",
+          "p": "Avant de lancer, tu demandes une estimation, souvent en jours. Si elle te paraît élevée, tu demandes ce qui la compose plutôt que de la contester. Tu peux aussi découper : faire d'abord une version simple, puis l'améliorer.",
+          "ex": "« 8 jours pour les rappels » : on peut commencer par un e-mail simple en 2 jours, et ajouter les notifications de l'appli plus tard.",
+          "say": "« Qu'est-ce qui fait l'essentiel du coût ? Peut-on livrer une première version plus simple ? »"
+        },
+        {
+          "w": "Les bonnes questions",
+          "s": "pour ne rien découvrir trop tard",
+          "p": "Est-ce que l'appli mobile est concernée ? Y a-t-il un impact sur les données existantes ? Quels risques ? Faut-il prévenir les utilisateurs ? Combien coûtera la maintenance ? Qu'est-ce qui pourrait bloquer ?",
+          "ex": "Changer la structure des fiches métiers peut casser les liens déjà partagés sur les réseaux sociaux.",
+          "say": "« Avant de valider, je demande toujours l'impact sur l'appli, sur les données et sur la maintenance. »"
+        },
+        {
+          "w": "Tenir le périmètre",
+          "s": "éviter que la demande grossisse en route",
+          "p": "En cours de développement, les nouvelles idées s'ajoutent (« et tant qu'on y est… »). Chaque ajout retarde la livraison et coûte. Tu notes les idées dans la liste des demandes pour plus tard, sauf si elles sont indispensables.",
+          "ex": "Pendant le développement des rappels, l'équipe demande aussi des statistiques : c'est un ticket séparé, pour la suite.",
+          "say": "« Bonne idée, je la note pour la prochaine version, pour ne pas retarder celle-ci. »"
+        },
+        {
+          "w": "Traduire pour les équipes",
+          "s": "dans l'autre sens",
+          "p": "Tu expliques aux équipes ce que dit le prestataire, en impacts concrets : ce qui change pour elles, quand, et ce qu'elles doivent faire. Jamais de jargon.",
+          "ex": "« Le déploiement est prévu mardi » devient « mardi, entre 8 h et 9 h, le site sera indisponible quelques minutes ; ensuite, vous verrez le nouveau bouton de rappel ».",
+          "say": "« Je traduis chaque annonce technique en ce que ça change pour les équipes. »"
+        },
+        {
+          "w": "Une relation de confiance",
+          "s": "partenaire, pas adversaire",
+          "p": "Tu préviens tôt quand une priorité change, tu reconnais le travail bien fait, tu restes factuel quand ça se passe mal. Un prestataire qui se sent respecté prévient lui aussi plus tôt des problèmes.",
+          "ex": "Tu as été prestataire : tu sais ce que vaut un client qui donne des demandes claires et des retours rapides.",
+          "say": "« J'ai été prestataire, je sais qu'un client clair et réactif obtient un meilleur travail. »"
+        }
+      ],
+      "extra": "<div class=\"topic\"><span class=\"tag\">Modèle de ticket d'évolution</span><div class=\"pitch\"><p><b>Titre :</b> Rappel par e-mail aux pros qui n'ont pas répondu à un jeune</p><p><b>Contexte :</b> une partie des messages envoyés par les jeunes reste sans réponse. Un jeune sans réponse revient rarement sur la plateforme.</p><p><b>User story :</b> en tant que pro bénévole, je veux être relancé quand un jeune m'a écrit, afin de ne pas le laisser sans réponse.</p><p><b>Critères d'acceptation :</b><br>1. Étant donné un message non lu depuis 7 jours, quand la tâche quotidienne passe, alors le pro reçoit un e-mail de rappel.<br>2. Un même message ne déclenche qu'un seul rappel.<br>3. L'e-mail contient le prénom du jeune et un lien direct vers la conversation.<br>4. Le pro peut désactiver ces rappels dans ses préférences.</p><p><b>Hors périmètre (pour plus tard) :</b> notification dans l'application mobile, statistiques de réponse.</p><p><b>Priorité :</b> haute · <b>Échéance souhaitée :</b> avant la rentrée de janvier</p><p><b>Questions au prestataire :</b> estimation en jours ? Impact sur l'envoi des e-mails actuels ?</p></div></div><div class=\"topic\"><span class=\"tag\">À dire plutôt que…</span><div class=\"tbl\"><table><thead><tr><th>Au lieu de</th><th>Dis plutôt</th></tr></thead><tbody><tr><td>« C'est urgent »</td><td>« C'est prioritaire parce que le forum a lieu jeudi : il faut une correction avant mercredi midi. »</td></tr><tr><td>« Ça ne marche pas »</td><td>« Attendu : … Obtenu : … Voici les étapes et une capture. »</td></tr><tr><td>« Faites un bouton rouge »</td><td>« Les jeunes ne voient pas les réponses ; il faut qu'ils les remarquent dès la connexion. »</td></tr><tr><td>« C'est trop cher »</td><td>« Qu'est-ce qui fait l'essentiel du coût ? Une première version plus simple est-elle possible ? »</td></tr><tr><td>« Tant qu'on y est… »</td><td>« Je note cette idée pour la prochaine version. »</td></tr></tbody></table></div></div>",
+      "quiz": [
+        {
+          "q": "Quelle formulation est la meilleure pour une demande au prestataire ?",
+          "o": [
+            "« Ajoutez une popup rouge sur l'accueil »",
+            "« Les jeunes ne voient pas qu'un pro leur a répondu ; il faut qu'ils le remarquent dès la connexion »",
+            "« Faites quelque chose pour les réponses »"
+          ],
+          "a": 1,
+          "e": "On décrit le problème et le résultat attendu ; le prestataire propose la solution technique."
+        },
+        {
+          "q": "À quoi servent les critères d'acceptation ?",
+          "o": [
+            "À fixer le prix",
+            "À savoir précisément quoi livrer et quoi tester à la recette",
+            "À choisir le langage de programmation"
+          ],
+          "a": 1,
+          "e": "Ce sont des conditions vérifiables qui servent de contrat entre toi et le développeur."
+        },
+        {
+          "q": "Une décision est prise au téléphone avec le prestataire. Ensuite ?",
+          "o": [
+            "Rien, c'est décidé",
+            "Je la confirme par écrit le jour même",
+            "J'attends la prochaine réunion"
+          ],
+          "a": 1,
+          "e": "Ce qui n'est pas écrit se perd ou se discute. Le compte rendu ou l'e-mail fait foi."
+        },
+        {
+          "q": "L'estimation te paraît trop élevée. Bonne réaction ?",
+          "o": [
+            "Imposer un chiffre plus bas",
+            "Demander ce qui compose le coût et s'il existe une première version plus simple",
+            "Changer de prestataire immédiatement"
+          ],
+          "a": 1,
+          "e": "Comprendre le chiffrage et découper en versions permet souvent de réduire le coût sans conflit."
+        },
+        {
+          "q": "Pendant le développement, une équipe demande une fonction de plus. Que fais-tu ?",
+          "o": [
+            "Je l'ajoute au ticket en cours",
+            "Je la note dans un ticket séparé pour la suite, sauf si elle est indispensable",
+            "Je refuse définitivement"
+          ],
+          "a": 1,
+          "e": "C'est tenir le périmètre : on évite de retarder et de renchérir la version en cours."
+        }
+      ]
+    },
+    devis: {
+      "why": "Une partie du budget digital de JobIRL passe par des devis de prestataires. Tu devras les demander, les lire, les comparer et les faire valider. Savoir ce que contient un bon devis, et ce qu'il oublie souvent, évite les mauvaises surprises : une recette non prévue, une maintenance facturée à part, une appli oubliée.",
+      "terms": [
+        {
+          "w": "Forfait ou régie",
+          "s": "deux façons de payer",
+          "p": "Au forfait, le prestataire s'engage sur un prix fixe pour un périmètre décrit précisément : s'il dépasse le temps prévu, c'est pour lui. En régie, tu paies le temps réellement passé, au jour : c'est souple, mais le coût final n'est pas garanti.",
+          "ex": "Une évolution bien définie (rappel par e-mail aux pros) se prête au forfait. Une période de corrections et d'ajustements après une refonte se prête plutôt à la régie, avec un plafond.",
+          "say": "« Forfait quand le besoin est clair, régie plafonnée quand il faut de la souplesse. »"
+        },
+        {
+          "w": "Jour-homme et TJM",
+          "s": "l'unité de mesure",
+          "p": "Un jour-homme, c'est une journée de travail d'une personne. Le TJM (taux journalier moyen) est son prix par jour, hors taxes. Un devis de 5 jours à 600 € HT fait 3 000 € HT. Les TJM varient beaucoup selon le profil (freelance, agence, développeur junior ou senior) : ce qui compte, c'est le total et ce qu'il couvre.",
+          "ex": "3 jours de développement + 0,5 jour de recette + 0,5 jour de gestion de projet = 4 jours.",
+          "say": "« Je regarde le nombre de jours par tâche plus que le TJM seul. »"
+        },
+        {
+          "w": "Ce que contient un bon devis",
+          "s": "la checklist",
+          "p": "Le détail par tâche ou par lot avec les jours, les hypothèses (ce que le prestataire suppose), les exclusions (ce qui n'est pas compris), le planning, les conditions de paiement (souvent un acompte, puis le solde à la livraison), la durée de validité du devis, la garantie après livraison.",
+          "ex": "Une ligne « Développement : 10 jours » sans détail ne permet ni de comparer ni de négocier.",
+          "say": "« Je demande un devis détaillé par tâche, avec les hypothèses et les exclusions. »"
+        },
+        {
+          "w": "Les oublis fréquents",
+          "s": "ce qu'il faut vérifier",
+          "p": "La recette est-elle incluse ? La gestion de projet ? L'application mobile, ou seulement le site ? La mise en production ? La documentation et la formation des équipes ? La garantie ? La maintenance après la livraison ? L'hébergement ?",
+          "ex": "Un devis moins cher qui exclut la version mobile coûtera plus cher au final.",
+          "say": "« Avant de comparer les prix, je vérifie que les devis couvrent le même périmètre. »"
+        },
+        {
+          "w": "HT, TTC et TVA",
+          "s": "un piège pour une association",
+          "p": "Les devis sont souvent présentés hors taxes (HT). Une association qui n'exerce pas d'activité lucrative ne récupère généralement pas la TVA : son vrai coût est le prix TTC. Un prestataire en franchise de TVA (micro-entrepreneur sous le seuil) n'en facture pas.",
+          "ex": "3 000 € HT avec 20 % de TVA = 3 600 € TTC pour l'association.",
+          "say": "« Pour le budget, je raisonne en TTC, puisque l'association ne récupère pas la TVA. »"
+        },
+        {
+          "w": "Comparer plusieurs devis",
+          "s": "à périmètre égal",
+          "p": "On envoie le même cahier des charges à deux ou trois prestataires, puis on compare dans un tableau : prix TTC, jours par tâche, délai, garantie, maintenance, références, qualité des questions posées. Le moins cher n'est pas toujours le meilleur choix.",
+          "ex": "Un prestataire qui pose de bonnes questions sur les jeunes et les mentors a mieux compris le besoin.",
+          "say": "« Je compare à périmètre égal, et je regarde aussi la compréhension du besoin. »"
+        },
+        {
+          "w": "Discuter le prix sans braquer",
+          "s": "comprendre avant de négocier",
+          "p": "Demander ce qui fait l'essentiel du coût, proposer de découper en versions (une première version simple, puis des améliorations), retirer les options non indispensables, étaler sur plusieurs mois. Éviter d'exiger une baisse sans contrepartie : le prestataire réduira la qualité ou les tests.",
+          "ex": "« Peut-on livrer d'abord le rappel par e-mail, et la notification dans l'appli au trimestre suivant ? »",
+          "say": "« Je négocie le périmètre plutôt que le prix du jour. »"
+        },
+        {
+          "w": "Travaux supplémentaires et avenant",
+          "s": "rien sans devis signé",
+          "p": "Toute demande nouvelle en cours de projet fait l'objet d'un devis complémentaire (ou avenant), validé par écrit avant que le travail commence. Sinon, la facture finale réserve des surprises.",
+          "ex": "L'équipe veut ajouter un filtre par région en cours de route : devis complémentaire avant de lancer.",
+          "say": "« Aucun travail supplémentaire sans devis complémentaire validé. »"
+        },
+        {
+          "w": "Valider et suivre",
+          "s": "du devis à la facture",
+          "p": "Le devis est validé en interne (budget, directrice du digital), signé, parfois accompagné d'un bon de commande. À la réception de la facture, tu vérifies qu'elle correspond au devis et que la livraison a été recettée.",
+          "ex": "On ne paie pas le solde d'une évolution qui n'a pas passé la recette.",
+          "say": "« Je rapproche chaque facture du devis et de la recette avant paiement. »"
+        }
+      ],
+      "extra": "<div class=\"topic\"><span class=\"tag\">Exemple de devis lu et annoté</span><div class=\"tbl\"><table><thead><tr><th>Ligne du devis</th><th>Jours</th><th>Ce que tu vérifies</th></tr></thead><tbody><tr><td>Analyse et conception</td><td>0,5</td><td>Ont-ils compris les 4 critères d'acceptation ?</td></tr><tr><td>Développement rappel e-mail</td><td>2</td><td>Comprend-il la préférence « désactiver les rappels » ?</td></tr><tr><td>Modèle d'e-mail</td><td>0,5</td><td>Le texte est-il fourni par JobIRL ou par eux ?</td></tr><tr><td>Tests et recette</td><td>0,5</td><td>Testé en préprod avant livraison ?</td></tr><tr><td>Mise en production</td><td>0,5</td><td>Date et heure creuses ? Retour arrière prévu ?</td></tr><tr><td><b>Total : 4 jours × 600 € HT</b></td><td><b>2 400 € HT</b></td><td><b>2 880 € TTC</b> pour l'association</td></tr><tr><td>Exclusions : notification dans l'appli mobile</td><td>—</td><td>À prévoir dans une version suivante</td></tr><tr><td>Garantie : 1 mois</td><td>—</td><td>Corrections gratuites des anomalies pendant 1 mois</td></tr></tbody></table></div></div>",
+      "quiz": [
+        {
+          "q": "Le besoin est précis et ne bougera pas. Quel mode est le plus adapté ?",
+          "o": [
+            "Régie",
+            "Forfait",
+            "Bénévolat"
+          ],
+          "a": 1,
+          "e": "Au forfait, le prix est fixe pour un périmètre clair ; c'est le prestataire qui porte le risque de dépassement."
+        },
+        {
+          "q": "Un devis : 5 jours à 600 € HT. Coût réel pour une association qui ne récupère pas la TVA ?",
+          "o": [
+            "3 000 €",
+            "3 600 €",
+            "2 400 €"
+          ],
+          "a": 1,
+          "e": "3 000 € HT + 20 % de TVA = 3 600 € TTC."
+        },
+        {
+          "q": "Deux devis : 4 000 € et 6 000 €. Que fais-tu d'abord ?",
+          "o": [
+            "Je prends le moins cher",
+            "Je vérifie qu'ils couvrent le même périmètre",
+            "Je prends le plus cher"
+          ],
+          "a": 1,
+          "e": "Un devis moins cher exclut souvent la recette, l'appli ou la garantie."
+        },
+        {
+          "q": "En cours de projet, une équipe veut une fonction de plus.",
+          "o": [
+            "On l'ajoute, on verra la facture",
+            "Devis complémentaire validé avant de commencer",
+            "On refuse toujours"
+          ],
+          "a": 1,
+          "e": "Tout ajout passe par un avenant ou un devis complémentaire signé."
+        },
+        {
+          "q": "Bonne façon de faire baisser un devis ?",
+          "o": [
+            "Exiger −30 %",
+            "Découper en versions et retirer les options non indispensables",
+            "Menacer de partir"
+          ],
+          "a": 1,
+          "e": "On négocie le périmètre, pas la qualité."
+        }
+      ]
+    },
+    contrat: {
+      "why": "Une fois la plateforme livrée, il faut la faire vivre : corriger les bugs, appliquer les mises à jour de sécurité, faire de petites évolutions. C'est le rôle du contrat de maintenance. Le contrat protège aussi l'association : à qui appartient le code, qui détient les accès, comment changer de prestataire sans tout perdre.",
+      "terms": [
+        {
+          "w": "TMA",
+          "s": "tierce maintenance applicative",
+          "p": "La maintenance confiée à un prestataire. Trois types : corrective (corriger les bugs), préventive (mises à jour de sécurité, versions du framework), évolutive (petites améliorations). Elle est souvent payée par un forfait mensuel ou par un crédit de jours à consommer.",
+          "ex": "Un crédit de 3 jours par mois, dont le reste est reportable ou non selon le contrat.",
+          "say": "« Je vérifie ce que couvre la TMA : correctif seul, ou aussi préventif et petites évolutions. »"
+        },
+        {
+          "w": "SLA",
+          "s": "les délais garantis",
+          "p": "Le contrat fixe des délais selon la gravité. Délai de prise en charge (le prestataire commence à traiter) et délai de résolution (c'est corrigé). Exemple courant : bloquant pris en charge en 4 heures ouvrées, majeur en 1 jour, mineur en 5 jours.",
+          "ex": "Les inscriptions sont bloquées un vendredi à 17 h : le SLA dit si quelqu'un intervient avant lundi.",
+          "say": "« Je connais les délais du SLA par niveau de gravité, et ce qu'il prévoit le week-end. »"
+        },
+        {
+          "w": "Garantie",
+          "s": "après la livraison",
+          "p": "Pendant une période après la mise en production (souvent de 1 à 3 mois), le prestataire corrige gratuitement les anomalies de ce qu'il a livré. Une anomalie est un écart avec ce qui était prévu, pas une nouvelle demande.",
+          "ex": "Le rappel e-mail part deux fois au lieu d'une : garantie. Ajouter un SMS : nouvelle demande.",
+          "say": "« Pendant la garantie, je fais remonter vite les anomalies, avec les critères d'acceptation en référence. »"
+        },
+        {
+          "w": "Propriété du code",
+          "s": "à qui il appartient",
+          "p": "Le contrat doit préciser la cession des droits sur le code développé spécifiquement pour JobIRL. Sans cela, le prestataire reste propriétaire et l'association n'a qu'un droit d'utilisation. Les briques libres (open source) gardent leurs propres licences.",
+          "ex": "Une clause « cession des droits patrimoniaux sur les développements spécifiques, à la livraison et au paiement ».",
+          "say": "« Je vérifie que les développements spécifiques sont bien cédés à l'association. »"
+        },
+        {
+          "w": "Réversibilité",
+          "s": "pouvoir changer de prestataire",
+          "p": "L'association doit pouvoir reprendre la main : accès au dépôt de code (Git), documentation technique, identifiants, base de données exportable. Le nom de domaine, l'hébergement et les comptes des stores doivent être au nom de l'association.",
+          "ex": "Si le compte Apple de l'application est au nom du prestataire, changer de prestataire bloque les mises à jour.",
+          "say": "« Domaine, hébergement, stores et code : tout doit être au nom de JobIRL. »"
+        },
+        {
+          "w": "Les accès",
+          "s": "qui a les clés",
+          "p": "Tenir une liste à jour de tous les accès (hébergeur, nom de domaine, stores, outils d'e-mail, analytics), stockés dans un gestionnaire de mots de passe partagé. Comptes nominatifs plutôt que partagés, et retrait des accès au départ d'une personne ou d'un prestataire.",
+          "ex": "Un ancien prestataire qui a toujours accès au serveur est un risque de sécurité.",
+          "say": "« Je tiens l'inventaire des accès et je les retire dès qu'une personne part. »"
+        },
+        {
+          "w": "Sous-traitance des données",
+          "s": "le RGPD dans le contrat",
+          "p": "Quand un prestataire accède aux données des utilisateurs, le RGPD (article 28) impose un contrat qui précise ce qu'il peut en faire, la sécurité, la localisation, la suppression en fin de contrat.",
+          "ex": "L'hébergeur et l'outil d'envoi des e-mails sont des sous-traitants au sens du RGPD.",
+          "say": "« Chaque prestataire qui touche aux données a sa clause de sous-traitance. »"
+        },
+        {
+          "w": "Suivi de la maintenance",
+          "s": "rendre compte",
+          "p": "Un compte rendu mensuel : tickets traités, temps consommé, mises à jour faites, incidents. Il permet de vérifier la facture et de repérer les sujets qui reviennent.",
+          "ex": "Si un même bug revient trois mois de suite, il mérite une vraie correction plutôt que des rustines.",
+          "say": "« Je demande un reporting mensuel de la maintenance. »"
+        }
+      ],
+      "quiz": [
+        {
+          "q": "Appliquer une mise à jour de sécurité du framework, c'est de la maintenance…",
+          "o": [
+            "Évolutive",
+            "Préventive",
+            "Commerciale"
+          ],
+          "a": 1,
+          "e": "La préventive anticipe les problèmes : sécurité, versions."
+        },
+        {
+          "q": "Que fixe un SLA ?",
+          "o": [
+            "Le prix du jour",
+            "Les délais de prise en charge et de résolution selon la gravité",
+            "Le design"
+          ],
+          "a": 1,
+          "e": "C'est l'engagement de niveau de service."
+        },
+        {
+          "q": "Le compte Google Play de l'appli est au nom du prestataire. Risque ?",
+          "o": [
+            "Aucun",
+            "Bloquer les mises à jour si on change de prestataire",
+            "L'appli devient payante"
+          ],
+          "a": 1,
+          "e": "C'est une question de réversibilité : les comptes doivent être au nom de l'association."
+        },
+        {
+          "q": "Pendant la garantie, le prestataire corrige gratuitement…",
+          "o": [
+            "Toute nouvelle demande",
+            "Les anomalies de ce qu'il a livré",
+            "Les bugs des autres prestataires"
+          ],
+          "a": 1,
+          "e": "Une nouvelle demande reste une évolution, facturée."
+        }
+      ]
+    },
+    projet: {
+      "why": "Faire évoluer la plateforme, c'est enchaîner des projets, petits ou grands. Une méthode simple et partagée évite deux écueils : les projets qui n'avancent pas, et ceux qui sortent sans répondre au besoin. Le calendrier des jeunes (rentrée, Parcoursup, stages de 3e) impose aussi des dates fixes.",
+      "terms": [
+        {
+          "w": "Les étapes",
+          "s": "du besoin au bilan",
+          "p": "Cadrage (pourquoi, pour qui, quoi), conception (maquettes, tickets), développement, recette, mise en production, bilan. Sauter le cadrage ou la recette est la cause la plus fréquente d'échec.",
+          "ex": "Pour un nouveau parcours mentorat : cadrage avec l'équipe mentorat, maquettes validées, puis développement.",
+          "say": "« Je ne lance pas un développement sans cadrage ni recette prévue. »"
+        },
+        {
+          "w": "Le cadrage",
+          "s": "une page suffit",
+          "p": "Objectif, utilisateurs concernés, problème actuel, périmètre (ce qui est inclus et exclu), contraintes (budget, date, appli), indicateur de réussite. On le fait valider avant de demander un devis.",
+          "ex": "Objectif : réduire les messages sans réponse. Indicateur : taux de réponse des pros, de X % à Y % en trois mois.",
+          "say": "« Je cadre chaque projet sur une page, validée avant le devis. »"
+        },
+        {
+          "w": "Agile et sprint",
+          "s": "avancer par petits pas",
+          "p": "En méthode agile, on livre souvent de petites versions. Un sprint est une période courte (souvent de 1 à 3 semaines) avec une liste de tâches. À la fin : démonstration, puis rétrospective (ce qui a bien marché, ce qu'on change). Kanban est une variante plus simple : un tableau à colonnes « à faire, en cours, à tester, terminé ».",
+          "ex": "Chez Qualiscope, tu as travaillé en sprints avec Jira.",
+          "say": "« J'ai travaillé en sprints avec Jira : je sais suivre un backlog et préparer une démo. »"
+        },
+        {
+          "w": "Backlog et roadmap",
+          "s": "la liste et le cap",
+          "p": "Le backlog est la liste priorisée de toutes les demandes. La roadmap est la vision sur quelques mois : les grands sujets et leur ordre, partagée avec la direction et les équipes.",
+          "ex": "Roadmap du trimestre : rappels aux pros, amélioration de la recherche de stages, nouvelle page partenaires.",
+          "say": "« Je tiens le backlog au quotidien, et la roadmap trimestrielle avec la direction. »"
+        },
+        {
+          "w": "MVP",
+          "s": "la première version utile",
+          "p": "Le produit minimum viable : la plus petite version qui apporte déjà de la valeur et permet d'apprendre. On l'améliore ensuite selon les retours.",
+          "ex": "Rappel par e-mail d'abord ; notification dans l'appli et statistiques ensuite.",
+          "say": "« Je préfère une première version simple livrée vite, puis des améliorations mesurées. »"
+        },
+        {
+          "w": "Rétroplanning",
+          "s": "partir de la date fixe",
+          "p": "On part de la date à ne pas rater et on remonte : mise en prod, recette, développement, devis, cadrage. Chez JobIRL, les dates fixes viennent du calendrier scolaire : recherche de stage de 3e, formulation des vœux Parcoursup en début d'année, rentrée.",
+          "ex": "Une évolution utile pour Parcoursup doit être en ligne avant l'ouverture des vœux, donc recettée en décembre.",
+          "say": "« Je construis le planning à rebours à partir des dates du calendrier des jeunes. »"
+        },
+        {
+          "w": "Qui fait quoi",
+          "s": "la matrice RACI",
+          "p": "Pour chaque tâche : qui la Réalise, qui en est responsable et Approuve, qui est Consulté, qui est Informé. Évite les « je croyais que c'était toi ».",
+          "ex": "Recette : réalisée par toi, approuvée par la directrice du digital, équipe mentorat consultée, équipes terrain informées.",
+          "say": "« Sur un projet transverse, je clarifie qui réalise, qui valide, qui est consulté. »"
+        },
+        {
+          "w": "Risques et météo",
+          "s": "anticiper",
+          "p": "Une courte liste des risques (retard du prestataire, indisponibilité d'une équipe, refus d'Apple) avec une parade pour chacun. Une « météo » du projet (soleil, nuages, orage) résume l'état en un coup d'œil pour la direction.",
+          "ex": "Risque : validation Apple plus longue que prévu. Parade : soumettre l'appli une semaine plus tôt.",
+          "say": "« Chaque semaine, je donne la météo du projet et les risques à surveiller. »"
+        },
+        {
+          "w": "Conduite du changement",
+          "s": "faire adopter",
+          "p": "Une évolution réussie est une évolution utilisée. On informe avant, on forme, on accompagne après, on recueille les retours.",
+          "ex": "Avant de changer le back-office du mentorat, une démo de 30 minutes à l'équipe et un guide d'une page.",
+          "say": "« J'accompagne chaque changement : information, formation, retours. »"
+        },
+        {
+          "w": "Le bilan",
+          "s": "apprendre",
+          "p": "Après la mise en production, on vérifie l'indicateur choisi au cadrage et on note ce qu'on refera ou pas.",
+          "ex": "Taux de réponse des pros passé de X % à Y % : objectif atteint ou non, et pourquoi.",
+          "say": "« Je mesure chaque projet avec l'indicateur fixé au départ. »"
+        }
+      ],
+      "quiz": [
+        {
+          "q": "Quelle étape est le plus souvent sautée, et à tort ?",
+          "o": [
+            "Le développement",
+            "Le cadrage",
+            "La facture"
+          ],
+          "a": 1,
+          "e": "Sans cadrage, on développe la mauvaise chose."
+        },
+        {
+          "q": "Qu'est-ce qu'un MVP ?",
+          "o": [
+            "La version finale parfaite",
+            "La plus petite version qui apporte déjà de la valeur",
+            "Le meilleur développeur"
+          ],
+          "a": 1,
+          "e": "On livre vite, on mesure, on améliore."
+        },
+        {
+          "q": "Dans un RACI, le A désigne…",
+          "o": [
+            "Celui qui réalise",
+            "Celui qui approuve et en est responsable",
+            "Un archiviste"
+          ],
+          "a": 1,
+          "e": "Réalise, Approuve, Consulté, Informé."
+        },
+        {
+          "q": "Une évolution doit être prête pour Parcoursup. Comment planifier ?",
+          "o": [
+            "Commencer et voir",
+            "Rétroplanning à partir de l'ouverture des vœux",
+            "Attendre février"
+          ],
+          "a": 1,
+          "e": "On part de la date fixe et on remonte les étapes."
+        }
+      ]
+    },
+    recette: {
+      "why": "La recette est le moment où tu engages ta responsabilité : en validant, tu dis que l'évolution est prête pour les jeunes, les pros et les équipes. Une recette sérieuse et une mise en production préparée évitent les régressions et les pannes un jour de forum.",
+      "terms": [
+        {
+          "w": "Le cahier de recette",
+          "s": "la liste des tests",
+          "p": "Un tableau de cas de test : le scénario, le compte utilisé, les étapes, le résultat attendu, le résultat obtenu, le statut (OK ou KO). Il s'écrit à partir des critères d'acceptation, avant la livraison.",
+          "ex": "Cas 3 : compte pro, message non lu depuis 7 jours → un e-mail de rappel reçu. Statut : OK.",
+          "say": "« J'écris le cahier de recette à partir des critères d'acceptation, avant la livraison. »"
+        },
+        {
+          "w": "Les comptes de test",
+          "s": "un par rôle",
+          "p": "Un compte jeune, un compte pro, un compte mentor, un compte administrateur, avec de fausses données, sur l'environnement de préproduction. On ne teste jamais avec les données de vrais jeunes.",
+          "ex": "« jeune.test@… », « pro.test@… », réutilisés à chaque recette.",
+          "say": "« Je teste avec des comptes fictifs, un par rôle. »"
+        },
+        {
+          "w": "Les types de tests",
+          "s": "ne rien oublier",
+          "p": "Fonctionnel (ça fait ce qui est prévu), non-régression (le reste marche toujours), appareils et navigateurs (ordinateur, Android, iPhone, Chrome, Safari), cas limites (champ vide, texte très long, mauvaise saisie), et un minimum d'accessibilité (lisible, utilisable au clavier).",
+          "ex": "Le formulaire d'offre testé avec un titre de 200 caractères et sans photo.",
+          "say": "« Je teste aussi les cas limites et le parcours sur téléphone. »"
+        },
+        {
+          "w": "Anomalie, correction, nouveau test",
+          "s": "la boucle",
+          "p": "Chaque test KO devient une anomalie avec gravité, transmise au prestataire. Après correction, on refait le test, et on relance les tests de non-régression autour.",
+          "ex": "2 anomalies mineures et 1 majeure : la majeure doit être corrigée avant la mise en ligne.",
+          "say": "« Je ne valide pas tant qu'il reste une anomalie bloquante ou majeure. »"
+        },
+        {
+          "w": "Le procès-verbal de recette",
+          "s": "la validation écrite",
+          "p": "Le document qui acte la fin de la recette : validation sans réserve, validation avec réserves (anomalies mineures à corriger après, avec une date), ou refus. Il déclenche souvent le paiement du solde et le début de la garantie.",
+          "ex": "« Validé avec réserves : 2 anomalies cosmétiques à corriger sous 15 jours. »",
+          "say": "« Je signe le PV de recette avec réserves écrites si besoin. »"
+        },
+        {
+          "w": "Go / no-go",
+          "s": "la décision de mise en ligne",
+          "p": "Juste avant la mise en production, une courte décision collective : tout est prêt ? Recette validée, sauvegarde faite, équipes prévenues, prestataire disponible en cas de souci. Si un point manque, on reporte.",
+          "ex": "No-go la veille d'un forum des métiers : on reporte au lundi suivant.",
+          "say": "« Je préfère reporter une mise en ligne que la rater un jour d'événement. »"
+        },
+        {
+          "w": "Le plan de mise en production",
+          "s": "préparer le jour J",
+          "p": "Date et heure creuses (pas le vendredi soir, pas pendant un événement), sauvegarde juste avant, message aux équipes et éventuellement aux utilisateurs, procédure de retour arrière si quelque chose casse.",
+          "ex": "Mardi 8 h, sauvegarde à 7 h 45, retour arrière possible en 15 minutes.",
+          "say": "« Chaque mise en prod a sa sauvegarde et son plan de retour arrière. »"
+        },
+        {
+          "w": "Après la mise en ligne",
+          "s": "vérifier à chaud",
+          "p": "Juste après, tu refais les parcours essentiels en production (inscription, connexion, message, offre). Puis tu surveilles les erreurs et les signalements pendant 48 heures.",
+          "ex": "Une vérification de 10 minutes après chaque mise en prod.",
+          "say": "« Après chaque mise en prod, je repasse les parcours essentiels en production. »"
+        },
+        {
+          "w": "Les notes de version",
+          "s": "dire ce qui change",
+          "p": "Un message court pour les équipes, et parfois pour les utilisateurs : ce qui est nouveau, ce qui change pour eux, où trouver de l'aide.",
+          "ex": "« Nouveau : les pros reçoivent un rappel quand un jeune attend une réponse depuis 7 jours. »",
+          "say": "« J'accompagne chaque livraison de notes de version claires. »"
+        }
+      ],
+      "extra": "<div class=\"topic\"><span class=\"tag\">Modèle de cahier de recette</span><div class=\"tbl\"><table><thead><tr><th>N°</th><th>Scénario</th><th>Compte</th><th>Étapes</th><th>Attendu</th><th>Obtenu</th><th>Statut</th></tr></thead><tbody><tr><td>1</td><td>Rappel envoyé</td><td>pro.test</td><td>Message non lu depuis 7 j, tâche lancée</td><td>1 e-mail reçu</td><td>1 e-mail reçu</td><td>OK</td></tr><tr><td>2</td><td>Un seul rappel</td><td>pro.test</td><td>Relancer la tâche le lendemain</td><td>Aucun 2e e-mail</td><td>2e e-mail reçu</td><td>KO, majeur</td></tr><tr><td>3</td><td>Lien direct</td><td>pro.test</td><td>Cliquer le lien de l'e-mail</td><td>Conversation ouverte</td><td>Page d'accueil</td><td>KO, mineur</td></tr><tr><td>4</td><td>Désactivation</td><td>pro.test</td><td>Désactiver les rappels</td><td>Aucun e-mail</td><td>Aucun e-mail</td><td>OK</td></tr></tbody></table></div></div>",
+      "quiz": [
+        {
+          "q": "À partir de quoi écrit-on le cahier de recette ?",
+          "o": [
+            "Du devis",
+            "Des critères d'acceptation",
+            "De la facture"
+          ],
+          "a": 1,
+          "e": "Les critères disent ce qui doit marcher, la recette le vérifie."
+        },
+        {
+          "q": "Il reste une anomalie majeure. Tu…",
+          "o": [
+            "Valides quand même",
+            "Ne valides pas avant correction",
+            "Valides avec réserves"
+          ],
+          "a": 1,
+          "e": "Les réserves sont pour les anomalies mineures."
+        },
+        {
+          "q": "Meilleur moment pour une mise en production ?",
+          "o": [
+            "Vendredi 18 h",
+            "La veille d'un forum",
+            "Un mardi matin, en heure creuse, avec sauvegarde"
+          ],
+          "a": 2,
+          "e": "On choisit un moment où l'équipe et le prestataire sont disponibles."
+        },
+        {
+          "q": "Juste après la mise en ligne, tu…",
+          "o": [
+            "Pars en week-end",
+            "Refais les parcours essentiels en production",
+            "Supprimes la préprod"
+          ],
+          "a": 1,
+          "e": "La vérification à chaud repère vite une régression."
+        }
+      ]
+    },
+    mobile: {
+      "why": "JobIRL a une application sur l'App Store et sur Google Play. Une appli ne se gère pas comme un site : chaque version passe par la validation d'Apple et de Google, les utilisateurs ne mettent pas tous à jour, et les notifications sont un outil puissant mais à utiliser avec soin.",
+      "terms": [
+        {
+          "w": "Les deux stores",
+          "s": "App Store et Google Play",
+          "p": "L'App Store (Apple) et Google Play (Google) distribuent l'application. Chacun demande un compte développeur : celui d'Apple est payant chaque année, avec une exonération possible pour les associations éligibles ; celui de Google est payé une seule fois. Ces comptes doivent être au nom de l'association.",
+          "ex": "Vérifier qui détient les comptes est une des premières choses à faire en arrivant.",
+          "say": "« Je vérifie d'abord que les comptes App Store et Google Play sont au nom de JobIRL. »"
+        },
+        {
+          "w": "La validation des stores",
+          "s": "chaque version est examinée",
+          "p": "Avant publication, Apple et Google examinent chaque nouvelle version. Cela prend souvent de quelques heures à quelques jours, et une version peut être refusée (règles de contenu, données, fonctionnement). On prévoit cette marge dans le planning.",
+          "ex": "Une version urgente pour la rentrée doit être soumise plusieurs jours avant.",
+          "say": "« Je prévois le délai de validation des stores dans chaque planning. »"
+        },
+        {
+          "w": "Versions et mises à jour",
+          "s": "tout le monde n'a pas la dernière",
+          "p": "Chaque version a un numéro. Beaucoup d'utilisateurs gardent une ancienne version longtemps. Si le serveur change, il doit rester compatible avec les anciennes versions, ou l'appli doit demander une mise à jour obligatoire.",
+          "ex": "Modifier l'API sans précaution peut casser l'appli des jeunes qui n'ont pas mis à jour.",
+          "say": "« Toute évolution du serveur doit rester compatible avec les versions de l'appli encore utilisées. »"
+        },
+        {
+          "w": "Tester avant publication",
+          "s": "TestFlight et tests internes",
+          "p": "Apple propose TestFlight et Google des pistes de test interne ou fermé : on installe la nouvelle version sur quelques téléphones avant de la publier pour tous.",
+          "ex": "Les équipes testent la nouvelle version sur leurs propres téléphones pendant deux jours.",
+          "say": "« Chaque version passe par TestFlight et le test interne Google avant publication. »"
+        },
+        {
+          "w": "Les notifications push",
+          "s": "utiles, pas envahissantes",
+          "p": "Les messages qui s'affichent sur le téléphone. Sur iPhone, l'utilisateur doit les autoriser. Trop de notifications font désinstaller l'appli. On les réserve à ce qui est utile : un pro a répondu, un rendez-vous de mentorat approche.",
+          "ex": "« Karim, un pro t'a répondu » plutôt qu'une notification promotionnelle chaque semaine.",
+          "say": "« Les notifications servent les jeunes, pas notre communication. »"
+        },
+        {
+          "w": "La fiche du store",
+          "s": "la vitrine",
+          "p": "Le nom, la description, les captures d'écran, l'icône et les mots-clés. Bien rédigée, elle aide à être trouvé dans les stores (on parle d'ASO). Les avis et les notes jouent aussi beaucoup.",
+          "ex": "Mettre à jour les captures quand l'interface change.",
+          "say": "« Je soigne la fiche du store et je réponds aux avis. »"
+        },
+        {
+          "w": "Les avis",
+          "s": "une source de retours",
+          "p": "Les avis laissés sur les stores signalent des bugs et des attentes. On peut y répondre publiquement. Une note qui baisse après une mise à jour signale souvent une régression.",
+          "ex": "Plusieurs avis « l'appli plante au démarrage » depuis la dernière version : à traiter en urgence.",
+          "say": "« Je lis les avis des stores après chaque version. »"
+        },
+        {
+          "w": "Les rapports de plantage",
+          "s": "savoir quand l'appli plante",
+          "p": "Des outils (comme Firebase Crashlytics ou Sentry) remontent automatiquement les plantages, avec le modèle de téléphone et la version. On suit le taux d'utilisateurs sans plantage.",
+          "ex": "98 % de sessions sans plantage sur Android, 92 % sur iPhone : il y a un problème côté iOS.",
+          "say": "« Je suis le taux de plantage par plateforme et par version. »"
+        },
+        {
+          "w": "Les déclarations de données",
+          "s": "transparence obligatoire",
+          "p": "Apple et Google demandent de déclarer les données collectées par l'appli et leur usage (étiquettes de confidentialité chez Apple, section sécurité des données chez Google). Elles doivent être exactes et tenues à jour.",
+          "ex": "Ajouter un outil de mesure d'audience oblige à mettre à jour ces déclarations.",
+          "say": "« Chaque nouvel outil dans l'appli, je mets à jour les déclarations de données des stores. »"
+        }
+      ],
+      "quiz": [
+        {
+          "q": "Pourquoi soumettre une version plusieurs jours avant une date importante ?",
+          "o": [
+            "Pour rien",
+            "Apple et Google examinent chaque version",
+            "Pour la payer moins cher"
+          ],
+          "a": 1,
+          "e": "La validation peut prendre plusieurs jours, voire être refusée."
+        },
+        {
+          "q": "Tu modifies l'API du serveur. Que vérifies-tu ?",
+          "o": [
+            "La couleur",
+            "La compatibilité avec les anciennes versions de l'appli",
+            "Le nom de domaine"
+          ],
+          "a": 1,
+          "e": "Beaucoup d'utilisateurs ne mettent pas à jour tout de suite."
+        },
+        {
+          "q": "À quoi sert TestFlight ?",
+          "o": [
+            "Payer Apple",
+            "Tester une version sur quelques iPhone avant publication",
+            "Envoyer des notifications"
+          ],
+          "a": 1,
+          "e": "C'est l'outil de test d'Apple."
+        },
+        {
+          "q": "Bonne notification pour un jeune ?",
+          "o": [
+            "Une promotion chaque jour",
+            "« Un pro t'a répondu »",
+            "Un rappel de mise à jour quotidien"
+          ],
+          "a": 1,
+          "e": "Une notification doit être utile, sinon l'appli est désinstallée."
+        }
+      ]
+    },
+    perf: {
+      "why": "L'annonce parle de « garantir la performance et la fiabilité » de la plateforme. Concrètement : un site rapide sur téléphone, qui ne tombe pas, dont les données sont sauvegardées et protégées. Tu n'as pas à tout faire toi-même, mais tu dois savoir quoi surveiller et quoi demander.",
+      "terms": [
+        {
+          "w": "La vitesse",
+          "s": "mesurer avant de corriger",
+          "p": "Les Core Web Vitals de Google : LCP (affichage du contenu principal, bon sous 2,5 s), INP (réactivité aux clics, bon sous 200 ms), CLS (stabilité de la mise en page, bon sous 0,1). Outils gratuits : PageSpeed Insights et Lighthouse.",
+          "ex": "Mesurer la page d'accueil et la page de recherche de stages sur mobile chaque mois.",
+          "say": "« Je suis les Core Web Vitals des pages clés sur mobile. »"
+        },
+        {
+          "w": "Les causes fréquentes de lenteur",
+          "s": "et les remèdes",
+          "p": "Images trop lourdes, trop de scripts tiers (vidéos, outils de mesure, publicité), pas de cache, serveur sous-dimensionné. Remèdes : compresser les images, charger les vidéos au clic, limiter les scripts, utiliser un CDN (réseau de serveurs qui rapproche les fichiers des utilisateurs).",
+          "ex": "La page d'accueil charge une vidéo YouTube : la charger seulement au clic accélère la page.",
+          "say": "« Avant d'acheter un plus gros serveur, je regarde les images et les scripts tiers. »"
+        },
+        {
+          "w": "La disponibilité",
+          "s": "savoir avant les utilisateurs",
+          "p": "Un outil de surveillance teste le site à intervalles réguliers et alerte par e-mail ou SMS en cas de panne. On suit le taux de disponibilité (99,9 % par mois correspond à environ 43 minutes d'indisponibilité).",
+          "ex": "Recevoir l'alerte à 7 h plutôt que d'apprendre la panne par une équipe à 10 h.",
+          "say": "« Une sonde surveille le site et m'alerte avant que les utilisateurs ne s'en rendent compte. »"
+        },
+        {
+          "w": "Les sauvegardes",
+          "s": "et surtout les tester",
+          "p": "Sauvegardes automatiques de la base et des fichiers, stockées ailleurs que sur le serveur. Règle 3-2-1 : 3 copies, sur 2 supports, dont 1 hors site. Une sauvegarde jamais restaurée n'est pas une sauvegarde : on teste la restauration régulièrement.",
+          "ex": "Une fois par trimestre, restaurer la sauvegarde sur la préproduction pour vérifier qu'elle fonctionne.",
+          "say": "« Je demande un test de restauration régulier, pas seulement des sauvegardes. »"
+        },
+        {
+          "w": "Les mises à jour de sécurité",
+          "s": "ne pas prendre de retard",
+          "p": "Le CMS, le framework, les extensions et le serveur reçoivent régulièrement des correctifs de failles. Un site jamais mis à jour devient une cible. C'est le rôle de la maintenance préventive.",
+          "ex": "Une extension WordPress non mise à jour est l'une des causes de piratage les plus courantes.",
+          "say": "« Les mises à jour de sécurité font partie du contrat de maintenance, avec un calendrier. »"
+        },
+        {
+          "w": "Les comptes et les mots de passe",
+          "s": "le premier rempart",
+          "p": "Mots de passe forts et uniques, double authentification sur les comptes sensibles (hébergeur, domaine, back-office administrateur, stores), droits minimum pour chacun, retrait des accès au départ d'une personne.",
+          "ex": "Activer la double authentification sur le compte de l'hébergeur et du nom de domaine.",
+          "say": "« Double authentification sur tous les comptes sensibles, et droits au strict nécessaire. »"
+        },
+        {
+          "w": "Les attaques courantes",
+          "s": "les connaître pour s'en protéger",
+          "p": "Hameçonnage (faux e-mails pour voler des identifiants), tentatives de mot de passe en masse, spam par les formulaires (robots qui créent de faux comptes ou envoient des messages). Parades : sensibilisation des équipes, limitation des tentatives de connexion, protection anti-robots sur les formulaires.",
+          "ex": "Une vague de faux comptes pros : demander une protection anti-robots sur l'inscription.",
+          "say": "« Je sensibilise les équipes à l'hameçonnage et je fais protéger les formulaires. »"
+        },
+        {
+          "w": "L'hébergement",
+          "s": "où tournent le site et les données",
+          "p": "Mutualisé (serveur partagé, simple et peu cher), serveur privé virtuel (plus de contrôle), cloud (s'adapte à la charge). Pour une plateforme avec des données de mineurs, on privilégie un hébergement dans l'Union européenne.",
+          "ex": "Les mentions légales de JobIRL indiquent son hébergeur.",
+          "say": "« Je vérifie où sont hébergées les données et ce que couvre le contrat d'hébergement. »"
+        },
+        {
+          "w": "Gérer un incident",
+          "s": "garder la tête froide",
+          "p": "Constater, prévenir le prestataire ou l'hébergeur, informer les équipes, suivre jusqu'à la résolution, puis écrire un bilan (cause, durée, mesures). En cas de fuite de données personnelles présentant un risque, la CNIL doit être notifiée dans les 72 heures.",
+          "ex": "Une page d'information « maintenance en cours » vaut mieux qu'un site qui affiche une erreur.",
+          "say": "« Après chaque incident, un bilan écrit et une mesure pour éviter qu'il se reproduise. »"
+        }
+      ],
+      "quiz": [
+        {
+          "q": "Un bon LCP est inférieur à…",
+          "o": [
+            "10 s",
+            "5 s",
+            "2,5 s"
+          ],
+          "a": 2,
+          "e": "Seuils : LCP 2,5 s, INP 200 ms, CLS 0,1."
+        },
+        {
+          "q": "Le site est lent. Premier réflexe ?",
+          "o": [
+            "Acheter un plus gros serveur",
+            "Regarder les images et les scripts tiers",
+            "Tout refaire"
+          ],
+          "a": 1,
+          "e": "Ce sont les causes les plus fréquentes, et les moins chères à corriger."
+        },
+        {
+          "q": "Une sauvegarde est vraiment fiable quand…",
+          "o": [
+            "Elle existe",
+            "On a testé sa restauration",
+            "Elle est sur le même serveur"
+          ],
+          "a": 1,
+          "e": "Une sauvegarde jamais restaurée n'est pas garantie."
+        },
+        {
+          "q": "Fuite de données personnelles présentant un risque : délai pour notifier la CNIL ?",
+          "o": [
+            "1 mois",
+            "72 heures",
+            "Aucun"
+          ],
+          "a": 1,
+          "e": "Article 33 du RGPD."
+        }
+      ]
+    },
+    rgpd: {
+      "why": "JobIRL accueille des jeunes dès 12 ans, qui échangent avec des adultes. La protection de leurs données et la sécurité des échanges sont un enjeu majeur, juridique et de confiance. Tu n'es pas juriste, mais chaque évolution de la plateforme doit être pensée avec ces règles.",
+      "terms": [
+        {
+          "w": "Donnée personnelle",
+          "s": "tout ce qui identifie quelqu'un",
+          "p": "Nom, e-mail, photo, adresse IP, établissement scolaire, messages : tout ce qui permet d'identifier une personne, directement ou en croisant des informations.",
+          "ex": "Le collège d'un élève de 3e et sa ville suffisent parfois à l'identifier.",
+          "say": "« Je considère comme personnelle toute donnée qui permet de retrouver quelqu'un. »"
+        },
+        {
+          "w": "Les grands principes",
+          "s": "ce que demande le RGPD",
+          "p": "Une finalité claire (pourquoi on collecte), la minimisation (seulement le nécessaire), une durée de conservation limitée, la sécurité, la transparence envers les personnes.",
+          "ex": "Demander la date de naissance complète est-il nécessaire, ou l'année suffit-elle ?",
+          "say": "« Pour chaque nouveau champ de formulaire, je demande : en a-t-on vraiment besoin ? »"
+        },
+        {
+          "w": "Les bases légales",
+          "s": "ce qui autorise à traiter une donnée",
+          "p": "Les principales : le consentement, l'exécution d'un contrat ou des conditions d'utilisation, l'intérêt légitime, l'obligation légale. Chaque traitement repose sur l'une d'elles.",
+          "ex": "Une newsletter repose sur le consentement ; le fonctionnement de la messagerie repose sur les conditions d'utilisation.",
+          "say": "« Chaque nouveau traitement a une base légale identifiée. »"
+        },
+        {
+          "w": "Les mineurs",
+          "s": "la règle française",
+          "p": "En France, un mineur peut consentir seul au traitement de ses données par un service en ligne à partir de 15 ans. En dessous, quand le traitement repose sur le consentement, il faut aussi l'accord d'un titulaire de l'autorité parentale. L'information doit être rédigée dans des mots compréhensibles par un jeune.",
+          "ex": "Pour un élève de 3e de 14 ans, un traitement fondé sur le consentement suppose aussi l'accord de ses parents.",
+          "say": "« Pour les moins de 15 ans, je vérifie avec le référent juridique ce qui demande l'accord des parents. »"
+        },
+        {
+          "w": "Cookies et traceurs",
+          "s": "consentement préalable",
+          "p": "Les traceurs non indispensables (mesure d'audience non exemptée, vidéos intégrées, réseaux sociaux, publicité) ne peuvent être déposés qu'après le consentement de l'utilisateur. Refuser doit être aussi simple qu'accepter. La CNIL contrôle régulièrement ce point.",
+          "ex": "Le site de JobIRL intègre YouTube, LinkedIn et Google Tag Manager : la bannière de consentement doit les bloquer tant que l'utilisateur n'a pas accepté.",
+          "say": "« Je vérifie qu'aucun traceur non indispensable ne se déclenche avant le consentement. »"
+        },
+        {
+          "w": "Les droits des personnes",
+          "s": "et le délai de réponse",
+          "p": "Accès, rectification, effacement, opposition, portabilité. L'association doit répondre en principe sous un mois. Il faut savoir où sont les données pour pouvoir y répondre.",
+          "ex": "Un parent demande la suppression du compte de son enfant : qui traite la demande, et où sont toutes ses données ?",
+          "say": "« Je m'assure qu'on sait retrouver et supprimer toutes les données d'un utilisateur. »"
+        },
+        {
+          "w": "Registre et sous-traitants",
+          "s": "la documentation",
+          "p": "Le registre des traitements liste ce que l'association fait des données. Chaque prestataire qui manipule des données (hébergeur, outil d'e-mail, outil de mesure) est un sous-traitant, avec un contrat adapté.",
+          "ex": "Ajouter un nouvel outil d'envoi de SMS : mise à jour du registre et contrat de sous-traitance.",
+          "say": "« Tout nouvel outil qui touche aux données passe par le registre. »"
+        },
+        {
+          "w": "Protéger les échanges",
+          "s": "jeunes et adultes",
+          "p": "Chartes d'utilisation acceptées par tous, bouton de signalement visible, modération réactive, procédure écrite en cas de comportement inapproprié, conservation des éléments utiles. Les échanges restent sur la plateforme, où ils peuvent être modérés.",
+          "ex": "Le site propose déjà un signalement « contenu inapproprié ou inexact » et des chartes.",
+          "say": "« La sécurité des jeunes passe avant tout : signalement simple, traitement rapide, procédure écrite. »"
+        },
+        {
+          "w": "La protection dès la conception",
+          "s": "penser données dès le départ",
+          "p": "À chaque évolution, on se pose la question des données dès le cadrage : quelles données, pour quoi, combien de temps, qui y accède. Pour un traitement à risque élevé, une analyse d'impact peut être nécessaire.",
+          "ex": "Un nouveau module de visio de mentorat : enregistrement ou pas ? Qui y a accès ?",
+          "say": "« J'intègre la question des données dès le cadrage de chaque projet. »"
+        }
+      ],
+      "quiz": [
+        {
+          "q": "Âge à partir duquel un mineur consent seul à un service en ligne en France ?",
+          "o": [
+            "13 ans",
+            "15 ans",
+            "18 ans"
+          ],
+          "a": 1,
+          "e": "En dessous, l'accord des parents est requis pour les traitements fondés sur le consentement."
+        },
+        {
+          "q": "La vidéo YouTube de la page d'accueil dépose des traceurs. Quand ?",
+          "o": [
+            "Toujours",
+            "Seulement après consentement",
+            "Seulement le week-end"
+          ],
+          "a": 1,
+          "e": "Les traceurs non indispensables exigent un consentement préalable."
+        },
+        {
+          "q": "Un parent demande l'effacement des données de son enfant. Délai de réponse ?",
+          "o": [
+            "1 an",
+            "1 mois en principe",
+            "Aucun"
+          ],
+          "a": 1,
+          "e": "C'est le délai prévu par le RGPD."
+        },
+        {
+          "q": "Le principe de minimisation, c'est…",
+          "o": [
+            "Collecter le plus possible",
+            "Ne collecter que le nécessaire",
+            "Réduire la taille des images"
+          ],
+          "a": 1,
+          "e": "Moins de données collectées, moins de risques."
+        }
+      ]
+    },
+    mesure: {
+      "why": "Pour améliorer la plateforme et rendre compte à la direction et aux financeurs, il faut des chiffres fiables et utiles. Le piège : suivre ce qui est facile à compter (les visites) plutôt que ce qui compte vraiment pour JobIRL (les mises en relation abouties).",
+      "terms": [
+        {
+          "w": "Les outils de mesure",
+          "s": "audience et usage",
+          "p": "Google Analytics 4 ou Matomo mesurent l'audience (visites, pages, sources). Matomo, configuré selon les recommandations de la CNIL, peut être exempté de consentement. Les données d'usage (inscriptions, messages, réponses) viennent plutôt de la base de données de la plateforme.",
+          "ex": "Les visites viennent de l'outil d'audience ; le taux de réponse des pros vient de la base de données.",
+          "say": "« Je croise l'audience et les données d'usage de la plateforme. »"
+        },
+        {
+          "w": "Trois niveaux d'indicateurs",
+          "s": "audience, usage, impact",
+          "p": "Audience : combien de personnes viennent. Usage : ce qu'elles font (inscriptions, messages, candidatures). Impact : ce que ça change pour elles (un jeune a trouvé un stage, a clarifié son orientation). L'impact se mesure souvent par questionnaire.",
+          "ex": "JobIRL publie déjà des chiffres d'impact issus de questionnaires (93 % des jeunes plus motivés à penser à leur orientation).",
+          "say": "« Je distingue audience, usage et impact, et je relie la plateforme aux chiffres d'impact. »"
+        },
+        {
+          "w": "Les KPI de JobIRL",
+          "s": "ce qui compte vraiment",
+          "p": "Inscriptions de jeunes et de pros, taux et délai de réponse des pros, nombre de binômes de mentorat actifs, offres de stage publiées et candidatures, jeunes qui reviennent après un mois.",
+          "ex": "Le taux de réponse des pros est l'indicateur clé de la promesse « échange avec des pros ».",
+          "say": "« Mon indicateur principal serait le taux de jeunes qui reçoivent une réponse d'un pro. »"
+        },
+        {
+          "w": "L'entonnoir",
+          "s": "où on perd les gens",
+          "p": "On suit les étapes d'un parcours et le pourcentage qui passe d'une étape à l'autre : visite → inscription → premier message envoyé → réponse reçue. L'étape où on perd le plus de monde est la priorité.",
+          "ex": "Beaucoup de jeunes s'inscrivent mais n'envoient jamais de message : travailler l'aide à l'écriture du premier message.",
+          "say": "« Je cherche l'étape de l'entonnoir où on perd le plus de jeunes. »"
+        },
+        {
+          "w": "Segmenter",
+          "s": "les moyennes cachent tout",
+          "p": "Comparer jeunes et pros, téléphone et ordinateur, régions, âges, nouveaux et anciens utilisateurs. Un problème invisible en moyenne apparaît souvent sur un segment.",
+          "ex": "Le taux de réponse est bon en Île-de-France mais faible en zone rurale.",
+          "say": "« Je regarde toujours les chiffres par segment, pas seulement la moyenne. »"
+        },
+        {
+          "w": "Le plan de marquage",
+          "s": "décider quoi mesurer",
+          "p": "La liste des actions à mesurer (clic sur « Envoyer un message », inscription réussie, candidature), avec un nom précis pour chacune. Sans plan, on se retrouve avec des chiffres incohérents ou absents.",
+          "ex": "Définir l'événement « message_envoye » avant le lancement d'une nouvelle messagerie.",
+          "say": "« Avant chaque évolution, je définis ce qu'on mesurera et comment. »"
+        },
+        {
+          "w": "Le test A/B",
+          "s": "comparer deux versions",
+          "p": "On montre deux versions d'une page à deux groupes d'utilisateurs et on compare le résultat. Utile quand le trafic est suffisant, sinon on compare avant et après.",
+          "ex": "Deux textes pour le bouton d'inscription des pros : lequel donne le plus d'inscriptions ?",
+          "say": "« Quand le trafic le permet, je teste deux versions plutôt que de deviner. »"
+        },
+        {
+          "w": "Le rapport mensuel",
+          "s": "court et utile",
+          "p": "Cinq chiffres clés, leur évolution, une explication, et les actions décidées. Une seule source pour chaque chiffre, pour éviter les incohérences.",
+          "ex": "Le site affiche aujourd'hui 185 000, 345 000 ou 110 000 membres selon les pages : une source unique réglerait le problème.",
+          "say": "« Un tableau de bord mensuel de cinq chiffres, avec une source unique pour chacun. »"
+        },
+        {
+          "w": "Les chiffres de vanité",
+          "s": "à ne pas surestimer",
+          "p": "Des chiffres flatteurs mais peu utiles pour décider : pages vues, abonnés, nombre total d'inscrits depuis toujours. Ils ont leur place dans la communication, pas dans le pilotage.",
+          "ex": "« 345 000 membres depuis la création » n'indique pas combien sont actifs aujourd'hui.",
+          "say": "« Je pilote avec les membres actifs, pas avec le total cumulé. »"
+        }
+      ],
+      "quiz": [
+        {
+          "q": "Quel indicateur reflète le mieux la mission de JobIRL ?",
+          "o": [
+            "Les pages vues",
+            "Le taux de jeunes qui reçoivent une réponse d'un pro",
+            "Les abonnés Instagram"
+          ],
+          "a": 1,
+          "e": "C'est la promesse de la plateforme."
+        },
+        {
+          "q": "Beaucoup d'inscrits n'envoient jamais de message. Sur quoi agir ?",
+          "o": [
+            "Plus de publicité",
+            "Aider à écrire le premier message",
+            "Supprimer l'inscription"
+          ],
+          "a": 1,
+          "e": "On agit sur l'étape de l'entonnoir où l'on perd le plus."
+        },
+        {
+          "q": "« 345 000 membres depuis la création » est…",
+          "o": [
+            "Un indicateur d'activité",
+            "Un chiffre cumulé, peu utile pour piloter",
+            "Un taux de réponse"
+          ],
+          "a": 1,
+          "e": "Il ne dit pas combien sont actifs aujourd'hui."
+        },
+        {
+          "q": "Pourquoi segmenter ?",
+          "o": [
+            "Pour faire joli",
+            "Parce qu'un problème peut être invisible en moyenne",
+            "Pour payer moins"
+          ],
+          "a": 1,
+          "e": "Exemple : taux de réponse faible en zone rurale."
+        }
+      ]
+    },
+    seo: {
+      "why": "Une grande partie des visiteurs arrive par Google, en cherchant « métier sans diplôme », « stage de 3e » ou « Parcoursup ». Le référencement naturel (SEO) permet à ces jeunes de trouver JobIRL. Tu n'as pas besoin d'être expert : il faut connaître les règles de base, savoir lire la Search Console et éviter de casser l'existant.",
+      "terms": [
+        {
+          "w": "Explorer, indexer, classer",
+          "s": "comment Google fonctionne",
+          "p": "Les robots de Google parcourent les pages (exploration), les enregistrent (indexation), puis les classent selon les recherches. Une page non indexée n'apparaît jamais dans les résultats.",
+          "ex": "Une nouvelle fiche métier met parfois plusieurs jours à apparaître dans Google.",
+          "say": "« Je vérifie d'abord que les pages importantes sont bien indexées. »"
+        },
+        {
+          "w": "La Search Console",
+          "s": "le tableau de bord SEO",
+          "p": "Outil gratuit de Google : pages indexées ou exclues et pourquoi, requêtes qui amènent des visiteurs, clics, impressions, position moyenne, problèmes de vitesse ou d'affichage mobile.",
+          "ex": "Découvrir que la requête « stage de 3e » amène beaucoup de visiteurs en novembre.",
+          "say": "« Je suis la Search Console chaque semaine : indexation, requêtes, erreurs. »"
+        },
+        {
+          "w": "Title et meta description",
+          "s": "ce qui s'affiche dans Google",
+          "p": "Le title est le titre bleu du résultat, la meta description le petit texte en dessous. Chaque page doit avoir les siens, uniques, clairs et alignés sur ce que cherchent les jeunes.",
+          "ex": "« Stage de 3e : trouve une entreprise près de chez toi | JobIRL ».",
+          "say": "« Chaque page clé a un title et une description pensés pour la recherche des jeunes. »"
+        },
+        {
+          "w": "robots.txt, sitemap et noindex",
+          "s": "ce qu'on montre à Google",
+          "p": "Le fichier robots.txt indique aux robots ce qu'ils peuvent explorer. Le sitemap liste les pages à indexer. La balise noindex demande de ne pas afficher une page. Une erreur dans ces fichiers peut faire disparaître des pages entières.",
+          "ex": "Les pages « Qui sommes-nous » et mentions légales de JobIRL sont en noindex : pour la première, à vérifier si c'est voulu.",
+          "say": "« Après chaque mise en prod, je vérifie qu'aucune page importante n'est passée en noindex. »"
+        },
+        {
+          "w": "Doublons, canonical et redirections",
+          "s": "une adresse par contenu",
+          "p": "Un même contenu à plusieurs adresses divise sa force dans Google. La balise canonical indique l'adresse de référence. La redirection 301 envoie définitivement une ancienne adresse vers la nouvelle. Une 404 signale une page introuvable.",
+          "ex": "Les mêmes articles existent sous /conseils-infos, /conseils-et-infos et /pro/… : il faut une adresse de référence.",
+          "say": "« Un contenu, une adresse de référence, et des redirections 301 pour le reste. »"
+        },
+        {
+          "w": "Le contenu",
+          "s": "répondre aux vraies questions",
+          "p": "Les pages bien classées répondent clairement aux questions des jeunes, sont à jour et bien structurées (titres, paragraphes courts). Les liens entre pages du site (maillage interne) aident Google et les visiteurs.",
+          "ex": "L'article « TOP 6 des secteurs où tu peux faire des métiers sans diplôme » répond à une recherche fréquente.",
+          "say": "« Je travaille le contenu avec l'équipe communication à partir des requêtes réelles des jeunes. »"
+        },
+        {
+          "w": "Les données structurées",
+          "s": "aider Google à comprendre",
+          "p": "Un code ajouté à la page qui décrit son contenu à Google. Pour les offres de stage et d'alternance, le format « JobPosting » permet d'apparaître dans les résultats d'emploi de Google.",
+          "ex": "Vérifier si les offres de stage de JobIRL utilisent ce format.",
+          "say": "« Les offres de stage pourraient gagner en visibilité avec les données structurées JobPosting. »"
+        },
+        {
+          "w": "Refonte et référencement",
+          "s": "ne pas tout perdre",
+          "p": "Lors d'une refonte, les adresses changent souvent. Sans plan de redirections, les pages perdent leur classement et les liens partagés tombent sur des 404.",
+          "ex": "Lister toutes les anciennes adresses et leur nouvelle adresse avant la mise en ligne.",
+          "say": "« Toute refonte commence par un plan de redirections. »"
+        },
+        {
+          "w": "GEO",
+          "s": "les moteurs à base d'IA",
+          "p": "Les jeunes posent aussi leurs questions à des assistants d'IA. Des contenus clairs, sourcés, structurés et à jour ont plus de chances d'être repris dans leurs réponses.",
+          "ex": "Des fiches métiers avec des faits précis et des témoignages de pros.",
+          "say": "« Les mêmes bonnes pratiques servent pour Google et pour les assistants d'IA. »"
+        }
+      ],
+      "quiz": [
+        {
+          "q": "Une page n'apparaît pas dans Google. Première vérification ?",
+          "o": [
+            "La couleur",
+            "Son indexation dans la Search Console (et un éventuel noindex)",
+            "Le nombre de mots"
+          ],
+          "a": 1,
+          "e": "Une page non indexée n'apparaît jamais."
+        },
+        {
+          "q": "Une ancienne adresse doit envoyer vers la nouvelle définitivement.",
+          "o": [
+            "Une 404",
+            "Une redirection 301",
+            "Un noindex"
+          ],
+          "a": 1,
+          "e": "La 301 transmet aussi le référencement."
+        },
+        {
+          "q": "À quoi sert la meta description ?",
+          "o": [
+            "À classer automatiquement",
+            "Au texte affiché sous le titre dans les résultats",
+            "À bloquer les robots"
+          ],
+          "a": 1,
+          "e": "Elle donne envie de cliquer."
+        },
+        {
+          "q": "Avant une refonte, que prépare-t-on pour le SEO ?",
+          "o": [
+            "Rien",
+            "Un plan de redirections des anciennes adresses",
+            "Un nouveau logo"
+          ],
+          "a": 1,
+          "e": "Sinon on perd le classement et on crée des 404."
+        }
+      ]
+    },
+    former: {
+      "why": "L'annonce demande de former les équipes, de rédiger la documentation et d'animer la communauté. C'est ton terrain : un an de formation au Pôle S, un guide de 14 chapitres pour Chant d'Orties, une plateforme de cours. L'objectif : que chaque équipe soit autonome sur la plateforme, et que les jeunes et les pros aient envie d'y revenir.",
+      "terms": [
+        {
+          "w": "Analyser les besoins",
+          "s": "qui doit savoir quoi",
+          "p": "Chaque équipe a ses usages : le mentorat gère les binômes, les équipes terrain présentent la plateforme en classe, la communication publie des contenus, les partenariats suivent les entreprises. On liste les tâches de chacun avant de former.",
+          "ex": "Les chargés de programme terrain ont besoin de savoir faire une démonstration rapide à des élèves de 3e.",
+          "say": "« Je commence par lister les tâches réelles de chaque équipe sur la plateforme. »"
+        },
+        {
+          "w": "Choisir le bon format",
+          "s": "selon le besoin",
+          "p": "Atelier court en petit groupe pour démarrer, tutoriel vidéo de 2 minutes pour un geste précis, guide écrit pour s'y référer, FAQ pour les questions fréquentes, permanence pour les cas particuliers.",
+          "ex": "Une vidéo de 90 secondes « publier une offre de stage » pour les entreprises partenaires.",
+          "say": "« Un atelier pour démarrer, un guide pour s'y référer, une FAQ pour les questions qui reviennent. »"
+        },
+        {
+          "w": "Structurer un guide",
+          "s": "par tâche, pas par écran",
+          "p": "Un titre qui dit la tâche, l'objectif, les prérequis, des étapes numérotées avec captures, les erreurs fréquentes et quoi faire. Phrases courtes, un verbe par étape.",
+          "ex": "C'est la structure de ton guide Chant d'Orties : se connecter, publier, ajouter un livre, corriger une erreur.",
+          "say": "« J'ai écrit un guide de 14 chapitres organisé par tâche, avec un chapitre de dépannage. »"
+        },
+        {
+          "w": "Les procédures",
+          "s": "les situations qui doivent bien se passer",
+          "p": "Des fiches courtes pour les situations sensibles ou répétitives : traiter un signalement, valider un compte partenaire, supprimer un compte à la demande d'un parent, publier un contenu urgent.",
+          "ex": "Une procédure de signalement qui dit qui fait quoi dans l'heure.",
+          "say": "« Les situations sensibles ont une procédure écrite, connue de tous. »"
+        },
+        {
+          "w": "Tenir la documentation à jour",
+          "s": "sinon elle ment",
+          "p": "Chaque page indique sa date de mise à jour et son responsable. Chaque mise en production qui change un usage entraîne la mise à jour du guide concerné. On range tout au même endroit.",
+          "ex": "Ton guide Chant d'Orties affiche « Guide vérifié le 10 octobre 2026 ».",
+          "say": "« Chaque livraison qui change un usage met à jour le guide le jour même. »"
+        },
+        {
+          "w": "Accueillir les nouveaux",
+          "s": "l'onboarding interne",
+          "p": "Un parcours d'arrivée pour chaque nouveau salarié ou service civique : accès, guide de démarrage, une formation de prise en main, une personne référente.",
+          "ex": "Les services civiques du mentorat arrivent souvent en cours d'année : un kit de démarrage leur fait gagner du temps.",
+          "say": "« Je prépare un kit de démarrage pour chaque nouvel arrivant. »"
+        },
+        {
+          "w": "Mesurer l'effet",
+          "s": "la formation sert-elle ?",
+          "p": "Moins de questions répétées, moins d'erreurs, des tâches faites sans aide. On recueille l'avis des personnes formées.",
+          "ex": "Les demandes « comment je fais pour… » baissent après la formation.",
+          "say": "« Je juge une formation au nombre de questions qui ne me sont plus posées. »"
+        },
+        {
+          "w": "Animer la communauté des pros",
+          "s": "les garder engagés",
+          "p": "Recruter des pros bénévoles, leur faciliter la tâche (rappels, modèles de réponse), valoriser leur engagement (remerciements, témoignages), leur montrer l'impact de leurs réponses.",
+          "ex": "Un e-mail trimestriel « grâce à vous, X jeunes ont eu une réponse ».",
+          "say": "« Un pro qui voit l'effet de ses réponses continue de répondre. »"
+        },
+        {
+          "w": "Animer la communauté des jeunes",
+          "s": "les aider à oser",
+          "p": "Aider à écrire le premier message (les modèles existent déjà sur le site), proposer des lives et des groupes d'entraide, relayer les belles histoires, avec l'équipe communication.",
+          "ex": "Un live « comment réussir son stage de 3e » en novembre, au moment où les élèves cherchent.",
+          "say": "« Avec l'équipe communication, je cale les animations sur le calendrier des jeunes. »"
+        },
+        {
+          "w": "Modérer",
+          "s": "un espace sûr",
+          "p": "Une charte claire, un signalement simple, des réponses rapides et cohérentes, et des règles connues de tous les modérateurs.",
+          "ex": "Un message déplacé est retiré, l'auteur averti, la situation tracée.",
+          "say": "« La modération suit une charte et une procédure, pour être juste et rapide. »"
+        }
+      ],
+      "quiz": [
+        {
+          "q": "Comment organiser un guide utilisateur ?",
+          "o": [
+            "Par écran du logiciel",
+            "Par tâche, avec étapes et erreurs fréquentes",
+            "Par ordre alphabétique"
+          ],
+          "a": 1,
+          "e": "On cherche toujours « comment faire telle chose »."
+        },
+        {
+          "q": "Comment savoir qu'une formation a marché ?",
+          "o": [
+            "Le nombre de diapositives",
+            "Moins de questions répétées et des tâches faites sans aide",
+            "La durée"
+          ],
+          "a": 1,
+          "e": "L'autonomie des équipes est le vrai résultat."
+        },
+        {
+          "q": "Comment garder les pros bénévoles engagés ?",
+          "o": [
+            "Leur envoyer plus de demandes",
+            "Leur montrer l'impact de leurs réponses et leur faciliter la tâche",
+            "Les relancer chaque jour"
+          ],
+          "a": 1,
+          "e": "Valoriser et simplifier."
+        },
+        {
+          "q": "Une mise en production change un usage. Et la documentation ?",
+          "o": [
+            "On verra plus tard",
+            "On met à jour le guide concerné tout de suite",
+            "On la supprime"
+          ],
+          "a": 1,
+          "e": "Une documentation périmée induit en erreur."
+        }
+      ]
+    }
+  };
+
+  var readMods = store.get("jobirl-read", {});
+  var modulesEl = document.getElementById("modules");
+  var listEl = document.getElementById("coursList"), lessonEl = document.getElementById("coursLesson");
+  function renderModules() {
+    modulesEl.innerHTML = MODULES.map(function (m, i) {
+      var ready = !!LESSONS[m.id];
+      var st = !ready ? '<span class="st soon">À venir</span>' : readMods[m.id] ? '<span class="st read">Lu</span>' : '<span class="st open">Disponible</span>';
+      return '<button class="mod" data-id="' + m.id + '"' + (ready ? '' : ' disabled') + '><span class="n">' + (i + 1) + '</span><span class="t">' + esc(m.t) + '</span>' + st + '<span class="d">' + esc(m.d) + '</span></button>';
+    }).join("");
+    Array.prototype.forEach.call(modulesEl.querySelectorAll(".mod:not(:disabled)"), function (b) {
+      b.addEventListener("click", function () { openLesson(b.getAttribute("data-id")); });
+    });
+  }
+  var SCHEMA = '<div class="schema" role="img" aria-label="Schéma : l\'utilisateur passe par le navigateur ou l\'application (front-end), qui interroge le serveur (back-end) par une API, lequel lit et écrit dans la base de données."><svg viewBox="0 0 640 150" xmlns="http://www.w3.org/2000/svg">'
+    + '<g font-family="Source Sans 3, sans-serif" font-size="14" text-anchor="middle">'
+    + '<rect x="10" y="40" width="130" height="70" rx="10" fill="var(--accent-soft)" stroke="var(--accent)"/><text x="75" y="70" fill="var(--ink)" font-weight="700">Front-end</text><text x="75" y="90" fill="var(--muted)">site, appli</text>'
+    + '<rect x="250" y="40" width="140" height="70" rx="10" fill="var(--mark-soft)" stroke="var(--mark)"/><text x="320" y="70" fill="var(--ink)" font-weight="700">Back-end</text><text x="320" y="90" fill="var(--muted)">serveur</text>'
+    + '<rect x="500" y="40" width="130" height="70" rx="10" fill="var(--good-soft)" stroke="var(--good)"/><text x="565" y="70" fill="var(--ink)" font-weight="700">Base de données</text><text x="565" y="90" fill="var(--muted)">comptes, offres</text>'
+    + '<path d="M140 75 H246" stroke="var(--muted)" stroke-width="2" fill="none" marker-end="url(#ar)"/><text x="195" y="64" fill="var(--muted)" font-size="13">API</text>'
+    + '<path d="M390 75 H496" stroke="var(--muted)" stroke-width="2" fill="none" marker-end="url(#ar)"/><text x="443" y="64" fill="var(--muted)" font-size="13">lit / écrit</text>'
+    + '<text x="75" y="132" fill="var(--muted)" font-size="12">ce que voit le jeune</text><text x="320" y="132" fill="var(--muted)" font-size="12">les règles, les e-mails</text><text x="565" y="132" fill="var(--muted)" font-size="12">ce qui est stocké</text>'
+    + '</g><defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10z" fill="var(--muted)"/></marker></defs></svg></div>';
+
+  function openLesson(id) {
+    var m = MODULES.filter(function (x) { return x.id === id; })[0], L = LESSONS[id];
+    var n = MODULES.indexOf(m) + 1;
+    var html = '<div class="lesson-head"><button class="back" id="backMods">← Tous les cours</button><span class="tag">Leçon ' + n + '</span><h2>' + esc(m.t) + '</h2></div>';
+    html += '<p class="why">' + esc(L.why) + '</p>';
+    if (L.schema) html += SCHEMA;
+    html += L.terms.map(function (t) {
+      return '<div class="term"><h3>' + esc(t.w) + ' <small>' + esc(t.s) + '</small></h3><p>' + esc(t.p) + '</p><p class="ex"><b>Exemple :</b> ' + esc(t.ex) + '</p><p class="say"><b>À dire</b>' + esc(t.say) + '</p></div>';
+    }).join("");
+    if (L.extra) html += L.extra;
+    html += '<div class="minq" id="minq"><h3>Vérifie tes acquis</h3>' + L.quiz.map(function (q, qi) {
+      return '<div class="item" data-q="' + qi + '"><p>' + (qi + 1) + '. ' + esc(q.q) + '</p><div class="opts">' + q.o.map(function (o, oi) { return '<button data-o="' + oi + '">' + esc(o) + '</button>'; }).join("") + '</div><div class="res"></div></div>';
+    }).join("") + '<p class="intro" id="minqScore"></p></div>';
+    var next = MODULES[n];
+    html += '<div class="row"><button class="btn" id="markRead">' + (readMods[id] ? "Leçon déjà marquée comme lue" : "Marquer comme lue") + '</button>' + (next ? '<span class="intro">Prochaine leçon : ' + esc(next.t) + '</span>' : '') + '</div>';
+    lessonEl.innerHTML = html;
+    listEl.hidden = true; lessonEl.hidden = false;
+    window.scrollTo(0, 0);
+    document.getElementById("backMods").addEventListener("click", closeLesson);
+    document.getElementById("markRead").addEventListener("click", function () { readMods[id] = true; store.set("jobirl-read", readMods); this.textContent = "Leçon marquée comme lue"; renderModules(); });
+    var good = 0, done = 0;
+    Array.prototype.forEach.call(lessonEl.querySelectorAll("#minq .item"), function (item) {
+      var q = L.quiz[+item.getAttribute("data-q")];
+      Array.prototype.forEach.call(item.querySelectorAll("button"), function (b) {
+        b.addEventListener("click", function () {
+          var o = +b.getAttribute("data-o");
+          Array.prototype.forEach.call(item.querySelectorAll("button"), function (x, k) { x.disabled = true; if (k === q.a) x.classList.add("ok"); else if (k === o) x.classList.add("ko"); });
+          if (o === q.a) good++; done++;
+          item.querySelector(".res").innerHTML = '<p class="explain"><b>' + (o === q.a ? "Exact. " : "Pas tout à fait. ") + '</b>' + esc(q.e) + '</p>';
+          if (done === L.quiz.length) document.getElementById("minqScore").textContent = "Résultat : " + good + " sur " + L.quiz.length + ".";
+        });
+      });
+    });
+  }
+  function closeLesson() { lessonEl.hidden = true; listEl.hidden = false; lessonEl.innerHTML = ""; }
+  renderModules();
+
+  /* ---------- Quiz ---------- */
+  var QUESTIONS = [
+    { q: "À qui le poste est-il rattaché ?", o: ["À la présidente fondatrice", "À la directrice du digital", "Au directeur administratif et financier", "À la responsable communication"], a: 1, e: "L'annonce indique un rattachement à la directrice du digital, avec un travail transversal avec toutes les équipes. Sur le site, il s'agit de la directrice digital et mentorat." },
+    { q: "Quel est le cœur du poste ?", o: ["Développer les nouvelles fonctionnalités", "Concevoir les maquettes dans Figma", "Piloter la plateforme et coordonner les prestataires", "Gérer les réseaux sociaux"], a: 2, e: "Le poste consiste à piloter, administrer et faire évoluer la plateforme. Ce sont les prestataires qui développent." },
+    { q: "Quelle tranche d'âge vise le réseau jobirl.com ?", o: ["15-25 ans", "12-30 ans", "18-30 ans", "16-26 ans"], a: 1, e: "Le site s'adresse aux 12-30 ans, ce qui implique une vigilance particulière sur les données des mineurs." },
+    { q: "Combien dure un accompagnement de mentorat en ligne ?", o: ["1 mois", "3 mois", "6 mois", "Un an"], a: 2, e: "Six mois, à distance, avec au moins un rendez-vous par mois, sur l'orientation ou la recherche de stage et d'alternance." },
+    { q: "Avant de mettre en ligne une évolution livrée par un prestataire, tu fais…", o: ["Une mise en production directe", "Une recette sur un environnement de test", "Un sondage auprès des jeunes", "Une revue du devis"], a: 1, e: "La recette consiste à tester la livraison sur un environnement séparé (préproduction) avant de la valider ou de la refuser par écrit." },
+    { q: "Une page de présentation n'apparaît pas dans Google. Que vérifies-tu d'abord ?", o: ["La couleur des boutons", "Une balise noindex sur la page", "Le poids des images", "Le nombre de liens sortants"], a: 1, e: "La balise noindex demande aux moteurs de ne pas indexer la page. Google Search Console permet de confirmer l'exclusion." },
+    { q: "Le même article existe sous deux adresses. La solution propre :", o: ["Supprimer l'un des deux sans rien faire d'autre", "Une redirection 301 ou une balise canonical vers l'adresse principale", "Ajouter plus de mots-clés", "Mettre les deux en noindex"], a: 1, e: "La 301 redirige définitivement vers la bonne adresse ; la canonical indique la version de référence sans rediriger." },
+    { q: "En France, à partir de quel âge un mineur peut-il consentir seul au traitement de ses données par un service en ligne ?", o: ["13 ans", "15 ans", "16 ans", "18 ans"], a: 1, e: "La France a fixé ce seuil à 15 ans. En dessous, l'accord du titulaire de l'autorité parentale est nécessaire." },
+    { q: "Quel seuil indique un bon LCP (affichage du contenu principal) ?", o: ["Moins de 2,5 secondes", "Moins de 5 secondes", "Moins de 0,1 seconde", "Moins de 10 secondes"], a: 0, e: "Pour les Core Web Vitals de Google : LCP sous 2,5 s, INP sous 200 ms, CLS sous 0,1." },
+    { q: "Dans la méthode MoSCoW, que signifie le W ?", o: ["Wanted", "Won't (pas cette fois)", "Weekly", "Workflow"], a: 1, e: "Must, Should, Could, Won't : ce qu'on décide explicitement de ne pas faire dans cette version." },
+    { q: "Quel indicateur reflète le mieux la mission de JobIRL ?", o: ["Le nombre de pages vues", "Le taux de mises en relation abouties entre jeunes et pros", "Le nombre d'abonnés Instagram", "Le temps passé sur la page d'accueil"], a: 1, e: "La valeur de JobIRL, c'est qu'un jeune obtienne une réponse d'un pro ou un mentor. Le trafic seul ne le mesure pas." },
+    { q: "Que contient une bonne demande d'évolution pour un prestataire ?", o: ["Seulement le titre", "Le contexte, l'objectif, un exemple, des critères d'acceptation et une priorité", "Une estimation du prix", "La solution technique imposée"], a: 1, e: "Plus la demande est précise et testable, moins il y a d'allers-retours. On décrit le besoin et le résultat attendu, le prestataire propose le comment." },
+    { q: "Que signifie TMA dans un contrat avec un prestataire ?", o: ["Tableau de mesure d'audience", "Tierce maintenance applicative", "Test de mise en accessibilité", "Taux moyen d'activité"], a: 1, e: "La tierce maintenance applicative couvre la correction des bugs et les petites évolutions d'une application après sa livraison." },
+    { q: "Quel est ton point faible le plus probable pour ce poste, et comment le traiter ?", o: ["Le code : je dis que je débute", "Le pilotage de prestataires : j'explique que j'ai été prestataire et ce que ça m'a appris", "L'âge : je n'en parle pas", "Le diplôme : je le cache"], a: 1, e: "Assume-le franchement. Avoir été de l'autre côté est un vrai argument pour cadrer et contrôler le travail d'un prestataire." }
+  ];
+  var qcard = document.getElementById("qcard");
+  var order = [], idx = 0, score = 0, answered = false;
+  function shuffle(a) { for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+  function newQuiz() { order = shuffle(QUESTIONS.map(function (_, i) { return i; })).slice(0, 12); idx = 0; score = 0; renderQ(); }
+  function renderQ() {
+    answered = false;
+    if (idx >= order.length) {
+      var best = Math.max(store.get("jobirl-best", 0), score);
+      store.set("jobirl-best", best);
+      qcard.innerHTML = '<h2>' + score + ' / ' + order.length + '</h2><p>' + (score >= 10 ? "Très bien, tu maîtrises le sujet." : score >= 7 ? "Bonne base. Relis les fiches du métier pour les questions manquées." : "Relis les onglets « Le poste » et « Le métier », puis recommence.") + '</p><p class="intro">Meilleur score : ' + best + ' / ' + order.length + '</p><div class="row"><button class="btn" id="qrestart">Recommencer</button></div>';
+      document.getElementById("qrestart").addEventListener("click", newQuiz);
+      return;
+    }
+    var item = QUESTIONS[order[idx]];
+    var html = '<div class="qmeta"><span>Question ' + (idx + 1) + ' sur ' + order.length + '</span><span>Score ' + score + '</span></div>';
+    html += '<div class="bar"><i style="width:' + (idx / order.length * 100) + '%"></i></div>';
+    html += '<h3>' + esc(item.q) + '</h3><div class="opts">';
+    item.o.forEach(function (opt, i) { html += '<button data-i="' + i + '">' + esc(opt) + '</button>'; });
+    html += '</div><div id="qafter"></div>';
+    qcard.innerHTML = html;
+    Array.prototype.forEach.call(qcard.querySelectorAll(".opts button"), function (b) {
+      b.addEventListener("click", function () { answer(parseInt(b.getAttribute("data-i"), 10)); });
+    });
+  }
+  function answer(i) {
+    if (answered) return; answered = true;
+    var item = QUESTIONS[order[idx]];
+    var btns = qcard.querySelectorAll(".opts button");
+    Array.prototype.forEach.call(btns, function (b, k) {
+      b.disabled = true;
+      if (k === item.a) b.classList.add("ok"); else if (k === i) b.classList.add("ko");
+    });
+    if (i === item.a) score++;
+    document.getElementById("qafter").innerHTML = '<p class="explain"><b>' + (i === item.a ? "Exact. " : "Pas tout à fait. ") + '</b>' + esc(item.e) + '</p><div class="row" style="margin-top:12px"><button class="btn" id="qnext">' + (idx + 1 < order.length ? "Question suivante" : "Voir mon score") + '</button></div>';
+    var next = document.getElementById("qnext"); next.focus();
+    next.addEventListener("click", function () { idx++; renderQ(); });
+  }
+  newQuiz();
+
+  /* ---------- Entretien ---------- */
+  var INTERVIEW = [
+    { k: "Parcours", q: "Présentez-vous.", a: ["Utilise ta présentation d'une minute (onglet Jour J).", "Fil conducteur : faire le lien entre les besoins des gens et la technique.", "Termine sur JobIRL : pourquoi ce poste maintenant."] },
+    { k: "Parcours", q: "Vous êtes développeur. Pourquoi un poste où vous ne codez pas ?", a: ["Ce que tu préfères dans tes missions, c'est comprendre le besoin, cadrer et voir les gens utiliser l'outil.", "Ta maîtrise du code reste un atout : parler d'égal à égal aux prestataires, vérifier les livraisons.", "Évite « je veux arrêter de coder ». Dis plutôt : « je mets ma compréhension technique au service du pilotage »."] },
+    { k: "Parcours", q: "Avez-vous déjà piloté des prestataires ?", a: ["Réponse honnête : pas encore de prestataire web, mais tu as été prestataire toi-même.", "Ce que ça t'a appris : ce qu'une demande doit contenir, ce qui fait déraper un projet.", "Exemple Qualiscope : tickets Jira, branches, revues de code, donc le fonctionnement d'une équipe tech de l'intérieur."] },
+    { k: "Parcours", q: "Parlez-nous d'une documentation que vous avez écrite.", a: ["Le guide d'administration de Chant d'Orties : 14 chapitres illustrés pour une équipe non technique.", "Organisation par usage (ajouter un livre, publier) et chapitre de dépannage.", "Résultat : l'équipe publie seule. Propose de le montrer sur ton téléphone."] },
+    { k: "Parcours", q: "Comment formez-vous des personnes peu à l'aise avec le numérique ?", a: ["Pôle S : un an avec 12 adultes en CDDI, à leur rythme.", "Méthode : partir d'un cas concret, faire faire, ne pas faire à la place.", "Médiateur : cours pas à pas, lecture audio, deux parcours selon le public."] },
+    { k: "Mise en situation", q: "Trois équipes vous demandent une évolution en même temps. Que faites-vous ?", a: ["Comprendre chaque besoin : qui est touché, combien de personnes, quelle urgence.", "Comparer avec une grille simple (impact / effort) partagée avec tout le monde.", "Faire arbitrer avec la directrice du digital, puis expliquer la décision aux équipes."] },
+    { k: "Mise en situation", q: "Le prestataire livre une fonctionnalité qui ne marche pas.", a: ["Reproduire le problème et le documenter : étapes, captures, navigateur, écart avec les critères d'acceptation.", "Refuser la livraison par écrit en renvoyant aux critères convenus.", "Fixer avec lui un nouveau délai, prévenir les équipes concernées."] },
+    { k: "Mise en situation", q: "Le site est en panne un lundi matin.", a: ["Confirmer la panne et son étendue (tout le site, une page, l'appli).", "Alerter le prestataire ou l'hébergeur selon le contrat, et prévenir les équipes.", "Après coup : cause, durée, ce qu'on change pour que ça ne se reproduise pas."] },
+    { k: "Mise en situation", q: "Comment savez-vous qu'une évolution a réussi ?", a: ["Fixer l'indicateur avant de lancer : par exemple le taux de réponse des pros.", "Comparer avant et après sur la même période.", "Demander aussi l'avis des équipes et de quelques jeunes."] },
+    { k: "Mise en situation", q: "Un jeune signale un message inapproprié d'un adulte.", a: ["Réagir vite : suspendre le compte ou le contenu en attendant.", "Suivre la procédure interne et les chartes, informer la hiérarchie.", "Conserver les éléments, répondre au jeune, et revoir la procédure si besoin."] },
+    { k: "Mise en situation", q: "Qu'avez-vous remarqué sur notre plateforme ?", a: ["Commencer par le positif : parcours clairs par besoin, double public bien séparé, offre riche.", "Puis un ou deux points concrets avec tact : chiffres de membres qui varient, pages en noindex à vérifier.", "Conclure sur ce que tu ferais en premier : un état des lieux avec l'équipe avant tout changement."] },
+    { k: "Motivation", q: "Pourquoi JobIRL ?", a: ["La mission : l'égalité des chances dans l'orientation, que tu as vue de près avec des publics en insertion.", "Le poste réunit ce que tu sais faire : technique, documentation, formation.", "Ton propre parcours de reconversion : tu sais ce que vaut un conseil de quelqu'un du métier."] },
+    { k: "Motivation", q: "Quelles sont vos prétentions salariales ?", a: ["L'annonce indique 38 à 42 k€ brut : rester dans la fourchette.", "Exemple : « La fourchette de l'annonce me convient ; je me situe autour de 40 k€ selon le périmètre. »"] },
+    { k: "À poser", q: "Le poste est-il une création ou un remplacement ?", a: ["Te dit ce qui existe déjà, et ce qu'on attend de toi les premiers mois."] },
+    { k: "À poser", q: "Combien de prestataires faut-il coordonner, et sur quels sujets ?", a: ["Site, application mobile, hébergement : permet de mesurer la charge réelle."] },
+    { k: "À poser", q: "Quelles sont les priorités pour les six premiers mois ?", a: ["Montre que tu penses déjà au plan d'action."] },
+    { k: "À poser", q: "Comment travaillez-vous avec le chef de projets digital ?", a: ["Clarifie la répartition des rôles avec le poste le plus proche du tien."] }
+  ];
+  var qlist = document.getElementById("qlist");
+  function renderInterview(filter) {
+    qlist.innerHTML = INTERVIEW.filter(function (it) { return filter === "all" || it.k === filter; }).map(function (it) {
+      return '<details class="q"><summary><span>' + esc(it.q) + '</span><span class="kind">' + esc(it.k) + '</span></summary><div class="ans"><ul>' + it.a.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join("") + '</ul></div></details>';
+    }).join("");
+  }
+  Array.prototype.forEach.call(document.querySelectorAll("#filters .chip"), function (c) {
+    c.addEventListener("click", function () {
+      Array.prototype.forEach.call(document.querySelectorAll("#filters .chip"), function (x) { x.setAttribute("aria-pressed", x === c ? "true" : "false"); });
+      renderInterview(c.getAttribute("data-k"));
+    });
+  });
+  renderInterview("all");
+
+  /* ---------- Glossaire ---------- */
+  var GLOSS = [
+    ["Backlog", "Liste priorisée de tout ce qui reste à faire sur un produit.", "Tu la tiens à jour et tu la partages avec les équipes."],
+    ["User story", "Besoin écrit du point de vue d'un utilisateur : « En tant que…, je veux…, afin de… ».", ""],
+    ["Critères d'acceptation", "Conditions testables qui disent quand une évolution est terminée.", "Base de la recette."],
+    ["Recette", "Phase de test d'une livraison avant sa mise en ligne, conclue par une validation ou un refus.", "On parle aussi de PV de recette."],
+    ["Préproduction", "Copie du site réservée aux tests (ex. preprod.jobirl.com).", ""],
+    ["Cahier des charges", "Document qui décrit le besoin, le périmètre, les contraintes et les délais d'un projet.", ""],
+    ["TMA", "Tierce maintenance applicative : maintenance d'une application confiée à un prestataire.", ""],
+    ["SLA", "Engagement de niveau de service : délai d'intervention, taux de disponibilité garanti.", ""],
+    ["Roadmap", "Feuille de route : les grandes évolutions prévues et leur ordre.", ""],
+    ["MoSCoW", "Méthode de priorisation : Must, Should, Could, Won't.", ""],
+    ["RICE", "Score de priorisation : portée × impact × confiance ÷ effort.", ""],
+    ["KPI", "Indicateur clé de performance, suivi dans le temps.", "Ex. taux de réponse des pros."],
+    ["Core Web Vitals", "Indicateurs de vitesse de Google : LCP, INP, CLS.", "Seuils : 2,5 s, 200 ms, 0,1."],
+    ["Uptime", "Taux de disponibilité d'un site sur une période.", "99,9 % ≈ 43 minutes de panne par mois."],
+    ["Search Console", "Outil gratuit de Google pour suivre l'indexation et les requêtes d'un site.", ""],
+    ["noindex", "Instruction qui demande aux moteurs de ne pas afficher une page.", ""],
+    ["Canonical", "Balise qui indique l'adresse de référence d'un contenu présent à plusieurs endroits.", ""],
+    ["Redirection 301", "Redirection définitive d'une ancienne adresse vers une nouvelle.", ""],
+    ["GEO", "Optimisation pour les moteurs génératifs (réponses fournies par une IA).", ""],
+    ["RGPD", "Règlement européen sur la protection des données personnelles.", "Contrôlé en France par la CNIL."],
+    ["Majorité numérique", "Âge à partir duquel un mineur consent seul au traitement de ses données en ligne : 15 ans en France.", ""],
+    ["RGAA", "Référentiel général d'amélioration de l'accessibilité, la référence française pour les sites accessibles.", ""],
+    ["Headless", "Architecture où le CMS (contenus) et le site affiché sont séparés et communiquent par API.", "Ce que tu as fait pour La Magicieuse."],
+    ["Onboarding", "Accompagnement d'un nouvel utilisateur lors de ses premiers pas.", "Ex. un jeune qui envoie son premier message à un pro."],
+    ["Modération", "Contrôle des contenus et des échanges publiés par les membres.", ""]
+  ];
+  var gloss = document.getElementById("gloss");
+  function norm(s) { return s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, ""); }
+  function renderGloss(term) {
+    var t = norm(term || "");
+    var rows = GLOSS.filter(function (g) { return !t || norm(g.join(" ")).indexOf(t) !== -1; });
+    gloss.innerHTML = rows.length ? rows.map(function (g) {
+      return '<div><dt>' + esc(g[0]) + '</dt><dd>' + esc(g[1]) + (g[2] ? '<small>' + esc(g[2]) + '</small>' : '') + '</dd></div>';
+    }).join("") : '<div><dt>Aucun résultat</dt><dd>Essaie un autre mot, par exemple « recette » ou « SEO ».</dd></div>';
+  }
+  document.getElementById("gsearch").addEventListener("input", function (e) { renderGloss(e.target.value); });
+  renderGloss("");
+
+  /* ---------- Jour J ---------- */
+  var CHECK = [
+    "Relire l'annonce et les 7 missions",
+    "Parcourir jobirl.com : accueil, mentorat, espace pro, offres de stage",
+    "Installer l'application JobIRL et tester l'inscription",
+    "Répéter la présentation d'une minute à voix haute",
+    "Préparer l'exemple du guide Chant d'Orties, ouvert sur le téléphone",
+    "Préparer la réponse sur le pilotage de prestataires",
+    "Préparer 3 questions à poser",
+    "Vérifier que tous les liens du CV s'ouvrent",
+    "Calculer le trajet jusqu'au 12 bis rue Louis Rouquier (ligne 3)",
+    "Envoyer le court message LinkedIn après la candidature"
+  ];
+  var done = store.get("jobirl-check", {});
+  var check = document.getElementById("check"), progress = document.getElementById("progress");
+  function renderCheck() {
+    var n = 0;
+    check.innerHTML = CHECK.map(function (c, i) {
+      var on = !!done[i]; if (on) n++;
+      return '<label class="' + (on ? "done" : "") + '" for="c' + i + '"><input type="checkbox" id="c' + i + '" data-i="' + i + '"' + (on ? " checked" : "") + '><span>' + esc(c) + '</span></label>';
+    }).join("");
+    progress.textContent = n + " sur " + CHECK.length + " étapes faites.";
+    Array.prototype.forEach.call(check.querySelectorAll("input"), function (inp) {
+      inp.addEventListener("change", function () { done[inp.getAttribute("data-i")] = inp.checked; store.set("jobirl-check", done); renderCheck(); });
+    });
+  }
+  renderCheck();
+
+  var timerEl = document.getElementById("timer"), left = 60, tick = null;
+  function draw() { timerEl.textContent = Math.floor(left / 60) + ":" + String(left % 60).padStart(2, "0"); }
+  document.getElementById("tstart").addEventListener("click", function () {
+    if (tick) { clearInterval(tick); tick = null; this.textContent = "Reprendre"; return; }
+    if (left === 0) left = 60;
+    this.textContent = "Pause";
+    var btn = this;
+    tick = setInterval(function () { left--; draw(); if (left <= 0) { clearInterval(tick); tick = null; btn.textContent = "Relancer"; timerEl.textContent = "Temps écoulé"; } }, 1000);
+  });
+  document.getElementById("treset").addEventListener("click", function () { clearInterval(tick); tick = null; left = 60; draw(); document.getElementById("tstart").textContent = "Lancer le chrono"; });
+})();
+</script>
